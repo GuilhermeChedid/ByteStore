@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ByteStore - Carrinho</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="home.html"><img src="imagens/logo.jpeg" alt="ByteStore Logo"></a>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="masculina.html">Masculina</a></li>
+            <li><a href="feminina.html">Feminina</a></li>
+            <li><a href="carrinho.html">Carrinho</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section id="carrinho">
+        <h2>Carrinho</h2>
+        <ul id="cartItems"></ul>
+        <p>Total: R$ <span id="totalPrice">0.00</span></p>
+        <button onclick="showPaymentOptions()">Finalizar Compra</button>
+    </section>
+
+    <section id="pagamento" style="display:none; margin-top:30px;">
+        <h2>Pagamento</h2>
+        <div class="payment-methods">
+            <button onclick="showForm('cartao')">Cartão</button>
+            <button onclick="showForm('pix')">PIX</button>
+        </div>
+
+        <!-- Formulário Cartão -->
+<form id="cartaoForm">
+    <button type="button" class="close-btn" onclick="closeForms()">X Fechar</button>
+    <label for="nome">Nome do titular:</label>
+    <input type="text" id="nome" name="nome" required>
+
+    <label for="cartao">Número do Cartão:</label>
+    <input type="text" id="cartao" name="cartao" required>
+
+    <label for="validade">Validade MM/AA:</label>
+    <input type="text" id="validade" name="validade" required>
+
+    <label for="cvv">CVV:</label>
+    <input type="text" id="cvv" name="cvv" required>
+
+    <button type="submit">Pagar</button>
+</form>
+
+<!-- Formulário PIX -->
+<form id="pixForm">
+    <button type="button" class="close-btn" onclick="closeForms()">X Fechar</button>
+    <label for="nomePix">Nome do Pagador:</label>
+    <input type="text" id="nomePix" name="nomePix" required>
+
+    <label for="cpfPix">CPF:</label>
+    <input type="text" id="cpfPix" name="cpfPix" required>
+
+    <label for="chavePix">Chave PIX:</label>
+    <input type="text" id="chavePix" name="chavePix" required>
+
+    <button type="submit">Pagar com PIX</button>
+</form>
+
+    </section>
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>

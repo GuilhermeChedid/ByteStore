@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ByteStore - Home</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="home.html">
+            <img src="imagens/logo.jpeg" alt="ByteStore Logo">
+        </a>
+    </div>
+
+    <!-- Barra de pesquisa -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Buscar produtos...">
+        <button onclick="searchProduct()">
+            <img src="imagens/lupa.webp" alt="Buscar" style="width:20px; height:20px;">
+        </button>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="masculina.html">Masculina</a></li>
+            <li><a href="feminina.html">Feminina</a></li>
+            <li><a href="carrinho.html">Carrinho</a></li>
+            <li><a href="minha_conta.html">Minha Conta</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Carrossel de Roupas -->
+<section class="banner-carousel">
+    <div class="carousel-slide">
+        <img src="imagens/masculina1.jpg" alt="Roupas 1">
+        <img src="imagens/masculina2.webp" alt="Roupas 2">
+        <img src="imagens/feminina1.jpg" alt="Roupas 3">
+    </div>
+</section>
+
+<!-- Destaques / Benefícios -->
+<section class="highlights">
+    <div class="highlight">
+        <img src="https://cdn-icons-png.flaticon.com/512/1995/1995569.png" alt="Caminhão" />
+        <p><strong>FRETE GRÁTIS</strong><br>Acima de R$300,00</p>
+    </div>
+    <div class="highlight">
+        <img src="https://cdn-icons-png.flaticon.com/512/833/833314.png" alt="Cartão" />
+        <p><strong>ATÉ 10X SEM JUROS NO CARTÃO</strong><br>APROVEITE!</p>
+    </div>
+    <div class="highlight">
+        <img src="imagens/recycle-sign.png" alt="Reciclável" />
+        <p><strong>PRIMEIRA TROCA GRÁTIS</strong><br>7 DIAS PARA TROCAR OU DEVOLVER</p>
+    </div>
+</section>
+
+<script src="js/script.js"></script>
+</body>
+</html>

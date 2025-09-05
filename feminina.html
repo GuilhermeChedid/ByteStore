@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ByteStore - Moda Feminina</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="home.html">
+            <img src="imagens/logo.jpeg" alt="ByteStore Logo">
+        </a>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="masculina.html">Masculina</a></li>
+            <li><a href="feminina.html">Feminina</a></li>
+            <li><a href="carrinho.html">Carrinho</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section class="products-container">
+        <h2 style="text-align:center; margin:30px 0;">Moda Feminina</h2>
+
+        <div class="product-card">
+            <img src="imagens/oversizedFeminina.webp" alt="Camiseta Oversized Feminina" id="fem1">
+            <div class="product-info">
+                <h3>Camiseta Feminina</h3>
+                <p class="price">R$ 79,90</p>
+                <div class="size-buttons">
+                    <button onclick="resizeImg('fem1', 1.1)">Aumentar</button>
+                    <button onclick="resizeImg('fem1', 0.9)">Diminuir</button>
+                </div>
+                <button onclick="addToCart('Camiseta Feminina',79.90)">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+
+        <div class="product-card">
+            <img src="imagens/saia1.webp" alt="Saia Feminina" id="fem2">
+            <div class="product-info">
+                <h3>Saia Feminina</h3>
+                <p class="price">R$ 99,90</p>
+                <div class="size-buttons">
+                    <button onclick="resizeImg('fem2', 1.1)">Aumentar</button>
+                    <button onclick="resizeImg('fem2', 0.9)">Diminuir</button>
+                </div>
+                <button onclick="addToCart('Saia Feminina',99.90)">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+
+        <!-- Você pode adicionar mais produtos seguindo o mesmo padrão -->
+    </section>
+</main>
+
+<script src="js/script.js"></script>
+</body>
+</html>
