@@ -34,20 +34,20 @@ Banco de Dados: Em estudo.
 
 MEMBROS DO GRUPO:
 
-//Aquiles: Gerente de Projeto
+//Aquiles Leandro Alves Rocha: Gerente de Projeto / GP
 
 Responsável por planejar, executar e monitorar o projeto. Ele define prazos e atua como a principal 
 ponte de comunicação entre a equipe e as partes interessadas. É o líder que garante que o projeto 
 seja entregue no prazo e dentro do escopo. 
 
-//Danilo: Analista de Requisitos / Testador
+//Danilo Pereira Braga: Analista de Requisitos / Testador
 
 Como Analista de Requisitos, ele pode ser responsável por coletar e documentar as necessidades dos 
 clientes e do projeto. Como Testador, ele garante a qualidade do produto final, identificando bugs 
 e validando se o sistema atende aos requisitos definidos. Ele trabalha em estreita colaboração com 
 os desenvolvedores para garantir que o produto esteja livre de falhas antes do lançamento.
 
-// Hanniel e Guilherme: Desenvolvedores
+// Hanniel Santos de Alencar e Guilherme Santos Chedid: Desenvolvedores / DEVS
 
 Responsáveis por escrever o código, construir as funcionalidades do sistema e integrar as diferentes
 partes do projeto. Eles trabalham em conjunto para resolver problemas técnicos, implementar as 
