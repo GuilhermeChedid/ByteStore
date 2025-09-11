@@ -1,4 +1,6 @@
-//ByteStore: E-commerce de Moda (PROJETO)
+(PROJETO)
+
+//ByteStore: E-commerce de Moda
 
 O ByteStore é um projeto de e-commerce de moda desenvolvido para o ambiente acadêmico, com foco 
 em uma experiência de compra online fluida e moderna. A plataforma foi concebida para ser mais 
@@ -27,3 +29,26 @@ Backend: Construído com .js, oferecendo para a comunicação entre o
 frontend e o banco de dados.
 
 Banco de Dados: Em estudo.
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+MEMBROS DO GRUPO:
+
+//Aquiles: Gerente de Projeto
+
+Responsável por planejar, executar e monitorar o projeto. Ele define prazos e atua como a principal 
+ponte de comunicação entre a equipe e as partes interessadas. É o líder que garante que o projeto 
+seja entregue no prazo e dentro do escopo. 
+
+//Danilo: Analista de Requisitos / Testador
+
+Como Analista de Requisitos, ele pode ser responsável por coletar e documentar as necessidades dos 
+clientes e do projeto. Como Testador, ele garante a qualidade do produto final, identificando bugs 
+e validando se o sistema atende aos requisitos definidos. Ele trabalha em estreita colaboração com 
+os desenvolvedores para garantir que o produto esteja livre de falhas antes do lançamento.
+
+// Hanniel e Guilherme: Desenvolvedores
+
+Responsáveis por escrever o código, construir as funcionalidades do sistema e integrar as diferentes
+partes do projeto. Eles trabalham em conjunto para resolver problemas técnicos, implementar as 
+funcionalidades planejadas e garantir a qualidade e o bom funcionamento do software.
