@@ -5,6 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ByteStore - Moda Feminina</title>
 <link rel="stylesheet" href="css/style.css">
+<style>
+    /* --- Estilo extra para filtros --- */
+    .filtros {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 180px 0;
+    }
+    .filtros input, .filtros select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+    .products-container {
+        max-width: 1000px;
+        margin: auto;
+    }
+    .product-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        padding: 15px;
+        margin: 20px;
+        text-align: center;
+        display: inline-block;
+        width: 250px;
+        vertical-align: top;
+    }
+    .product-card img {
+        max-width: 100%;
+        border-radius: 8px;
+    }
+    .price {
+        font-weight: bold;
+        color: #2a7a2a;
+        margin: 10px 0;
+    }
+</style>
 </head>
 <body>
 
@@ -28,30 +67,245 @@
     <section class="products-container">
         <h2 style="text-align:center; margin:30px 0;">Moda Feminina</h2>
 
-        <div class="product-card">
+        <!-- Filtros -->
+        <div class="filtros">
+            <input type="text" id="pesquisa" placeholder="Pesquisar produto...">
+
+            <select id="preco">
+                <option value="">Todos preços</option>
+                <option value="1">Até R$50</option>
+                <option value="2">R$50 - R$100</option>
+                <option value="3">Acima de R$100</option>
+            </select>
+
+            <select id="tamanho">
+                <option value="">Todos tamanhos</option>
+                <option value="P">P</option>
+                <option value="M">M</option>
+                <option value="G">G</option>
+                <option value="GG">GG</option>
+            </select>
+
+            <select id="categoria">
+                <option value="">Todas categorias</option>
+                <option value="camisa">Camisas</option>
+                <option value="saia">Saias</option>
+                <option value="vestido">Vestidos</option>
+                <option value="blusa">Blusas</option>
+                <option value="jaqueta">Jaquetas</option>
+                <option value="moletom">Moletons</option>
+            </select>
+        </div>
+
+        <!-- Produto 1 -->
+        <div class="product-card" 
+             data-preco="79.90" 
+             data-tamanho="M"
+             data-categoria="camisa"
+             data-nome="camiseta feminina">
             <img src="imagens/oversizedFeminina.webp" alt="Camiseta Oversized Feminina" id="fem1">
             <div class="product-info">
                 <h3>Camiseta Feminina</h3>
                 <p class="price">R$ 79,90</p>
-
-                <button onclick="addToCart('Camiseta Feminina',79.90)">Adicionar ao Carrinho</button>
+                <label for="tamanho-fem1">Tamanho: </label>
+                <select id="tamanho-fem1">
+                    <option value="P">P</option>
+                    <option value="M" selected>M</option>
+                    <option value="G">G</option>
+                    <option value="GG">GG</option>
+                </select>
+                <button onclick="addToCart('Camiseta Feminina',79.90,'imagens/oversizedFeminina.webp',document.getElementById('tamanho-fem1').value)">Adicionar ao Carrinho</button>
             </div>
         </div>
 
-        <div class="product-card">
+        <!-- Produto 2 -->
+        <div class="product-card" 
+             data-preco="99.90" 
+             data-tamanho="P"
+             data-categoria="saia"
+             data-nome="saia feminina">
             <img src="imagens/saia1.webp" alt="Saia Feminina" id="fem2">
             <div class="product-info">
                 <h3>Saia Feminina</h3>
                 <p class="price">R$ 99,90</p>
-
-                <button onclick="addToCart('Saia Feminina',99.90)">Adicionar ao Carrinho</button>
+                <label for="tamanho-fem2">Tamanho: </label>
+                <select id="tamanho-fem2">
+                    <option value="P" selected>P</option>
+                    <option value="M">M</option>
+                    <option value="G">G</option>
+                    <option value="GG">GG</option>
+                </select>
+                <button onclick="addToCart('Saia Feminina',99.90,'imagens/saia1.webp',document.getElementById('tamanho-fem2').value)">Adicionar ao Carrinho</button>
             </div>
         </div>
 
-        <!-- Você pode adicionar mais produtos seguindo o mesmo padrão -->
+        <!-- Produto 3 -->
+        <div class="product-card" data-preco="119.90" data-tamanho="M" data-categoria="vestido" data-nome="vestido feminino">
+            <img src="imagens/vestido feminino.webp" alt="Vestido Feminino" id="fem3">
+            <div class="product-info">
+                <h3>Vestido Feminino</h3>
+                <p class="price">R$ 119,90</p>
+                <label for="tamanho-fem3">Tamanho: </label>
+                <select id="tamanho-fem3">
+                    <option value="P">P</option>
+                    <option value="M" selected>M</option>
+                    <option value="G">G</option>
+                    <option value="GG">GG</option>
+                </select>
+                <button onclick="addToCart('Vestido Feminino',119.90,'imagens/vestido1.webp',document.getElementById('tamanho-fem3').value)">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+
+        <!-- Produto 4 -->
+        <div class="product-card" data-preco="69.90" data-tamanho="P" data-categoria="blusa" data-nome="blusa feminina">
+            <img src="imagens/blusa feminina.webp" alt="Blusa Feminina" id="fem4">
+            <div class="product-info">
+                <h3>Blusa Feminina</h3>
+                <p class="price">R$ 69,90</p>
+                <label for="tamanho-fem4">Tamanho: </label>
+                <select id="tamanho-fem4">
+                    <option value="P" selected>P</option>
+                    <option value="M">M</option>
+                    <option value="G">G</option>
+                    <option value="GG">GG</option>
+                </select>
+                <button onclick="addToCart('Blusa Feminina',69.90,'imagens/blusaFeminina.webp',document.getElementById('tamanho-fem4').value)">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+
+        <!-- Produto 5 -->
+        <div class="product-card" data-preco="139.90" data-tamanho="G" data-categoria="jaqueta" data-nome="jaqueta feminina">
+            <img src="imagens/jaqueta feminina.webp" alt="Jaqueta Feminina" id="fem5">
+            <div class="product-info">
+                <h3>Jaqueta Feminina</h3>
+                <p class="price">R$ 139,90</p>
+                <label for="tamanho-fem5">Tamanho: </label>
+                <select id="tamanho-fem5">
+                    <option value="P">P</option>
+                    <option value="M">M</option>
+                    <option value="G" selected>G</option>
+                    <option value="GG">GG</option>
+                </select>
+                <button onclick="addToCart('Jaqueta Feminina',139.90,'imagens/jaquetaFeminina.webp',document.getElementById('tamanho-fem5').value)">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+
+        <!-- Produto 6 -->
+        <div class="product-card" data-preco="89.90" data-tamanho="M" data-categoria="moletom" data-nome="moletom feminino">
+            <img src="imagens/moletom feminino.webp" alt="Moletom Feminino" id="fem6">
+            <div class="product-info">
+                <h3>Moletom Feminino</h3>
+                <p class="price">R$ 89,90</p>
+                <label for="tamanho-fem6">Tamanho: </label>
+                <select id="tamanho-fem6">
+                    <option value="P">P</option>
+                    <option value="M" selected>M</option>
+                    <option value="G">G</option>
+                    <option value="GG">GG</option>
+                </select>
+                <button onclick="addToCart('Moletom Feminino',89.90,'imagens/moletomFeminino.webp',document.getElementById('tamanho-fem6').value)">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+
     </section>
 </main>
 
-<script src="js/script.js"></script>
+<script>
+    // --- Filtro ---
+    const pesquisa = document.getElementById('pesquisa');
+    const preco = document.getElementById('preco');
+    const tamanho = document.getElementById('tamanho');
+    const categoria = document.getElementById('categoria');
+    const produtos = document.querySelectorAll('.product-card');
+
+    function filtrar() {
+        const texto = pesquisa.value.toLowerCase();
+        const price = preco.value;
+        const size = tamanho.value;
+        const cat = categoria.value;
+
+        produtos.forEach(produto => {
+            const nome = produto.getAttribute('data-nome');
+            const precoProd = parseFloat(produto.getAttribute('data-preco'));
+            const tamanhoProd = produto.getAttribute('data-tamanho');
+            const categoriaProd = produto.getAttribute('data-categoria');
+
+            let mostrar = true;
+
+            // pesquisa
+            if (texto && !nome.includes(texto)) {
+                mostrar = false;
+            }
+
+            // preço
+            if (price) {
+                if (price === "1" && precoProd > 50) mostrar = false;
+                if (price === "2" && (precoProd < 50 || precoProd > 100)) mostrar = false;
+                if (price === "3" && precoProd < 100) mostrar = false;
+            }
+
+            // tamanho
+            if (size && size !== tamanhoProd) {
+                mostrar = false;
+            }
+
+            // categoria
+            if (cat && cat !== categoriaProd) {
+                mostrar = false;
+            }
+
+            produto.style.display = mostrar ? 'inline-block' : 'none';
+        });
+    }
+
+    pesquisa.addEventListener('input', filtrar);
+    preco.addEventListener('change', filtrar);
+    tamanho.addEventListener('change', filtrar);
+    categoria.addEventListener('change', filtrar);
+
+    // Função salvar no carrinho
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function addToCart(nome, preco, imagem, tamanho) {
+        const item = { nome, preco, imagem, tamanho };
+        cart.push(item);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert(`${nome} (${tamanho}) adicionado ao carrinho por R$ ${preco.toFixed(2)}`);
+    }
+
+</script>
+
+<div id="mensagem-adicionado" class="mensagem-adicionado">
+        Produto adicionado ao carrinho!
+    </div>
+
+    <script>
+
+        // Função unificada para adicionar ao carrinho
+        function addToCart(nome, preco, imagem, tamanho) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existing = cart.find(item => item.nome === nome && item.tamanho === tamanho);
+
+            if (existing) {
+                existing.qty = (existing.qty || 1) + 1;
+            } else {
+                cart.push({ nome, preco, imagem, tamanho, qty: 1 });
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            
+            // Lógica para a mensagem estilizada
+            const mensagem = document.getElementById('mensagem-adicionado');
+            if (mensagem) {
+                mensagem.textContent = `${nome} adicionado ao carrinho!`;
+                mensagem.classList.add('show');
+                
+                setTimeout(() => {
+                    mensagem.classList.remove('show');
+                }, 3000);
+            }
+        }
+    </script>
+
 </body>
 </html>
