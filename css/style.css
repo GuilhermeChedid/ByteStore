@@ -221,12 +221,7 @@ header nav ul li a:hover {
     66% { transform: translateX(-200%); }
     100% { transform: translateX(0); }
 }
-/* Barra de pesquisa */
-.search-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+
 
 .search-bar input {
     padding: 8px 12px;
@@ -506,14 +501,6 @@ header nav ul li a:hover {
     margin-bottom: 10px;
 }
 
-/* Botões aumentar/diminuir */
-.size-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 5px;
-}
-
 .size-buttons button {
     padding: 6px 12px;
     border: none;
@@ -538,6 +525,67 @@ header nav ul li a:hover {
     .product-card img {
         max-width: 160px;
     }
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.miniatura {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.size-select {
+    margin-left: auto;
+    font-size: 12px;
+    padding: 2px 5px;
+}
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.miniatura {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.size-select {
+    margin-left: auto;
+    font-size: 12px;
+    padding: 2px 5px;
+}
+
+.mensagem-adicionado {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.mensagem-adicionado.show {
+    opacity: 1;
+    visibility: visible;
 }
 
 
