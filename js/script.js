@@ -15,9 +15,21 @@ function renderCart() {
 
     cart.forEach((item, index) => {
         total += item.preco * (item.qty || 1);
+
         const li = document.createElement('li');
+        li.classList.add("cart-item");
+
         li.innerHTML = `
-            ${item.nome} - R$ ${item.preco.toFixed(2)} x ${item.qty || 1} 
+            <img src="${item.imagem}" alt="${item.nome}" class="miniatura">
+            <span>${item.nome} - R$ ${item.preco.toFixed(2)} x ${item.qty || 1}</span>
+            
+            <select onchange="updateSize(${index}, this.value)" class="size-select">
+                <option value="P" ${item.tamanho === "P" ? "selected" : ""}>P</option>
+                <option value="M" ${item.tamanho === "M" ? "selected" : ""}>M</option>
+                <option value="G" ${item.tamanho === "G" ? "selected" : ""}>G</option>
+                <option value="GG" ${item.tamanho === "GG" ? "selected" : ""}>GG</option>
+            </select>
+
             <button onclick="removeItem(${index})" class="remove-btn">Remover</button>
         `;
         cartItems.appendChild(li);
@@ -27,16 +39,70 @@ function renderCart() {
 }
 
 // Adiciona produto ao carrinho
-function addToCart(nome, preco) {
-    const existing = cart.find(item => item.nome === nome);
-    if (existing) {
-        existing.qty = (existing.qty || 1) + 1;
+// Adiciona produto ao carrinho
+function addToCart(nome, preco, imagem = "img/default.jpg", tamanho = "M") {
+    let cart = JSON.parse(localStorage.getItem('carrinho')) || [];
+    const itemExistente = cart.find(item => item.nome === nome && item.tamanho === tamanho);
+
+    if (itemExistente) {
+        itemExistente.quantidade++;
     } else {
-        cart.push({ nome, preco, qty: 1 });
+        cart.push({
+            nome: nome,
+            preco: preco,
+            imagem: imagem,
+            tamanho: tamanho,
+            quantidade: 1
+        });
     }
-    localStorage.setItem('cart', JSON.stringify(cart));
-    renderCart();
-    alert(`${nome} adicionado ao carrinho!`);
+
+    localStorage.setItem("carrinho", JSON.stringify(cart));
+    
+    // Mostra a mensagem estilizada
+    const mensagem = document.getElementById('mensagem-adicionado');
+    mensagem.textContent = `${nome} adicionado ao carrinho!`;
+    mensagem.classList.add('show');
+    
+    // Oculta a mensagem depois de 3 segundos
+    setTimeout(() => {
+        mensagem.classList.remove('show');
+    }, 3000);
+
+}// Adiciona produto ao carrinho
+
+function addToCart(nome, preco, imagem = "img/default.jpg", tamanho = "M") {
+    let cart = JSON.parse(localStorage.getItem('carrinho')) || [];
+    const itemExistente = cart.find(item => item.nome === nome && item.tamanho === tamanho);
+
+    if (itemExistente) {
+        itemExistente.quantidade++;
+    } else {
+        cart.push({
+            nome: nome,
+            preco: preco,
+            imagem: imagem,
+            tamanho: tamanho,
+            quantidade: 1
+        });
+    }
+
+    localStorage.setItem("carrinho", JSON.stringify(cart));
+    
+    // Mostra a mensagem estilizada
+    const mensagem = document.getElementById('mensagem-adicionado');
+    mensagem.textContent = `${nome} adicionado ao carrinho!`;
+    mensagem.classList.add('show');
+    
+    // Oculta a mensagem depois de 3 segundos
+    setTimeout(() => {
+        mensagem.classList.remove('show');
+    }, 3000);
+}
+
+// Atualizar tamanho do item
+function updateSize(index, newSize) {
+    cart[index].tamanho = newSize;
+    localStorage.setItem("cart", JSON.stringify(cart));
 }
 
 // Remove item do carrinho
