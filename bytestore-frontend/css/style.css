@@ -1,4 +1,5 @@
 /* CONTEÚDO ANTERIOR DO SEU ARQUIVO base.css... */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
 
 /* Menu */
 header nav ul {
@@ -132,5 +133,34 @@ header nav ul li a:hover {
     header nav ul {
         flex-direction: column;
         gap: 10px;
+    }
+}
+/* Estilo para o texto sobre o carrossel */
+.banner-carousel {
+    position: relative; /* Necessário para posicionar o texto sobre a imagem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-text {
+    position: absolute;
+    z-index: 10; /* Garante que o texto fique na frente das imagens */
+    color: white;
+    text-align: center;
+    max-width: 80%;
+}
+
+.carousel-text h1 {
+    font-family: 'Playfair Display', serif; /* Fonte elegante */
+    font-size: 4rem; /* Tamanho grande para impacto */
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Sombra para legibilidade */
+}
+
+/* Ajuste para telas menores */
+@media(max-width: 768px) {
+    .carousel-text h1 {
+        font-size: 2.5rem;
     }
 }
