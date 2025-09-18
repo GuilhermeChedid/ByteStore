@@ -1,0 +1,101 @@
+/* Força a página a ter o tamanho exato da tela, sem rolagem */
+html, body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    margin: 0;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Container principal que ocupa todo o espaço restante abaixo do header */
+.home-main-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    min-height: 0;
+}
+
+/* Carrossel */
+.banner-carousel {
+    flex-grow: 1;
+    min-height: 0;
+    width: 95%;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-radius: 15px;
+    background-color: #f0f0f0;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-slide {
+    display: flex;
+    width: 300%;
+    height: 100%;
+    animation: slide 12s infinite ease-in-out;
+}
+
+.carousel-slide img {
+    width: 33.333%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
+/* Destaques / Benefícios */
+.highlights {
+    flex-shrink: 0;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    background-color: #f2f2f2;
+    width: 100%;
+}
+
+.highlight {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 180px;
+    transition: transform 0.3s; /* LINHA ADICIONADA DE VOLTA */
+}
+
+/* REGRA DE ANIMAÇÃO ADICIONADA DE VOLTA */
+.highlight:hover {
+    transform: translateY(-10px);
+}
+
+.highlight img {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+.highlight p {
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.highlight p strong {
+    font-size: 13px;
+}
+
+/* Animação do slide */
+@keyframes slide {
+    0% { transform: translateX(0); }
+    30% { transform: translateX(0); }
+    33% { transform: translateX(-33.333%); }
+    63% { transform: translateX(-33.333%); }
+    66% { transform: translateX(-66.666%); }
+    97% { transform: translateX(-66.666%); }
+    100% { transform: translateX(0); }
+}
