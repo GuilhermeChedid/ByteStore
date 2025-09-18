@@ -1,0 +1,136 @@
+/* CONTEÚDO ANTERIOR DO SEU ARQUIVO base.css... */
+
+/* Menu */
+header nav ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    /* Altere a linha abaixo de 600 para 700 */
+    font-weight: 700; /* <<< ALTERAÇÃO AQUI */
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+header nav ul li a:hover {
+    color: #111;
+    background-color: #b8f29b;
+}
+
+/* RESTANTE DO CÓDIGO... */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #fff;
+    color: #111;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: #111;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header .logo img {
+    height: 60px;
+    width: auto;
+}
+
+/* Menu */
+header nav ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+header nav ul li a:hover {
+    color: #111;
+    background-color: #b8f29b;
+}
+
+.search-bar input {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    width: 200px;
+    transition: 0.3s;
+}
+
+.search-bar input:focus {
+    box-shadow: 0 0 5px #b8f29b;
+}
+
+.search-bar button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: #b8f29b;
+    color: #111;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: #9fd987;
+}
+
+.mensagem-adicionado {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.mensagem-adicionado.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Responsivo */
+@media(max-width: 900px) {
+    header nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

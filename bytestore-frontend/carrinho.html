@@ -4,20 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ByteStore - Carrinho</title>
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="../bytestore-frontend/css/style.css">
+<link rel="stylesheet" href="../bytestore-frontend/css/carrinho.css">
+
 </head>
 <body>
 
 <header>
     <div class="logo">
-        <a href="home.html"><img src="imagens/logo.jpeg" alt="ByteStore Logo"></a>
+        <a href="home.html"><img src="../bytestore-frontend/imagens/logo.jpeg" alt="ByteStore Logo"></a>
     </div>
     <nav>
         <ul>
             <li><a href="home.html">Home</a></li>
             <li><a href="masculina.html">Masculina</a></li>
             <li><a href="feminina.html">Feminina</a></li>
-            <li><a href="carrinho.html">Carrinho</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
         </ul>
     </nav>
 </header>
@@ -25,6 +27,8 @@
 <main>
     <section id="carrinho">
         <h2>Carrinho</h2>
+        <p id="cart-message" class="cart-message"></p>
+
         <ul id="cartItems"></ul>
         <p>Total: R$ <span id="totalPrice">0.00</span></p>
         <button onclick="showPaymentOptions()">Finalizar Compra</button>
@@ -73,6 +77,6 @@
     </section>
 </main>
 
-<script src="js/script.js"></script>
+<script src="../js/script.js"></script>
 </body>
 </html>

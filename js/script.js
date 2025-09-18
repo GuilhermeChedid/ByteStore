@@ -39,70 +39,41 @@ function renderCart() {
 }
 
 // Adiciona produto ao carrinho
-// Adiciona produto ao carrinho
 function addToCart(nome, preco, imagem = "img/default.jpg", tamanho = "M") {
-    let cart = JSON.parse(localStorage.getItem('carrinho')) || [];
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
     const itemExistente = cart.find(item => item.nome === nome && item.tamanho === tamanho);
 
     if (itemExistente) {
-        itemExistente.quantidade++;
+        itemExistente.qty = (itemExistente.qty || 1) + 1;
     } else {
         cart.push({
             nome: nome,
             preco: preco,
             imagem: imagem,
             tamanho: tamanho,
-            quantidade: 1
+            qty: 1
         });
     }
 
-    localStorage.setItem("carrinho", JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
     
     // Mostra a mensagem estilizada
     const mensagem = document.getElementById('mensagem-adicionado');
-    mensagem.textContent = `${nome} adicionado ao carrinho!`;
-    mensagem.classList.add('show');
-    
-    // Oculta a mensagem depois de 3 segundos
-    setTimeout(() => {
-        mensagem.classList.remove('show');
-    }, 3000);
-
-}// Adiciona produto ao carrinho
-
-function addToCart(nome, preco, imagem = "img/default.jpg", tamanho = "M") {
-    let cart = JSON.parse(localStorage.getItem('carrinho')) || [];
-    const itemExistente = cart.find(item => item.nome === nome && item.tamanho === tamanho);
-
-    if (itemExistente) {
-        itemExistente.quantidade++;
-    } else {
-        cart.push({
-            nome: nome,
-            preco: preco,
-            imagem: imagem,
-            tamanho: tamanho,
-            quantidade: 1
-        });
+    if (mensagem) {
+        mensagem.textContent = `${nome} adicionado ao carrinho!`;
+        mensagem.classList.add('show');
+        
+        setTimeout(() => {
+            mensagem.classList.remove('show');
+        }, 3000);
     }
-
-    localStorage.setItem("carrinho", JSON.stringify(cart));
-    
-    // Mostra a mensagem estilizada
-    const mensagem = document.getElementById('mensagem-adicionado');
-    mensagem.textContent = `${nome} adicionado ao carrinho!`;
-    mensagem.classList.add('show');
-    
-    // Oculta a mensagem depois de 3 segundos
-    setTimeout(() => {
-        mensagem.classList.remove('show');
-    }, 3000);
 }
 
 // Atualizar tamanho do item
 function updateSize(index, newSize) {
     cart[index].tamanho = newSize;
     localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart(); // Re-renderiza para mostrar o novo total se o preço mudar por tamanho
 }
 
 // Remove item do carrinho
@@ -112,10 +83,24 @@ function removeItem(index) {
     renderCart();
 }
 
-// Mostrar seção de pagamento
+// Mostrar seção de pagamento com verificação
 function showPaymentOptions() {
+    const messageElement = document.getElementById('cart-message');
+    
+    // Esconde a mensagem e as opções de pagamento antes de qualquer verificação
+    messageElement.style.display = 'none';
     const pagamento = document.getElementById('pagamento');
-    if (pagamento) pagamento.style.display = 'block';
+    if (pagamento) pagamento.style.display = 'none';
+
+    // Verifica se o carrinho está vazio
+    if (cart.length === 0) {
+        // Se estiver vazio, define o texto da mensagem e a exibe
+        messageElement.textContent = "Você precisa adicionar algum produto no carrinho para finalizar compra";
+        messageElement.style.display = 'block';
+    } else {
+        // Caso contrário (se tiver itens), mostra as opções de pagamento
+        if (pagamento) pagamento.style.display = 'block';
+    }
 }
 
 // Mostrar formulário de pagamento específico
@@ -137,7 +122,7 @@ function closeForms() {
     if (pixForm) pixForm.style.display = 'none';
 }
 
-// Submissão de formulários
+// Submissão de formulários e outras lógicas
 document.addEventListener("DOMContentLoaded", () => {
     // Cartão
     const cartaoForm = document.getElementById('cartaoForm');
@@ -189,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Renderiza o carrinho ao carregar
+    // Renderiza o carrinho ao carregar a página
     renderCart();
 });
 
