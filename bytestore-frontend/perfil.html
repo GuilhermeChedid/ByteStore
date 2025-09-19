@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Perfil - ByteStore</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+    body { background-color: #f4f4f4; }
+    .account-container { display: flex; max-width: 1100px; margin: 50px auto; gap: 30px; align-items: flex-start; }
+    .account-nav { flex: 0 0 250px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 20px; }
+    .account-nav ul { list-style: none; padding: 0; margin: 0; }
+    .account-nav ul li a { display: block; padding: 15px; text-decoration: none; color: #333; font-weight: 600; border-radius: 6px; transition: background-color 0.2s, color 0.2s; cursor: pointer; }
+    .account-nav ul li a:hover { background-color: #f0f0f0; }
+    .account-nav ul li a.active { background-color: #111; color: #fff; }
+    .account-nav ul li a#logout-link { color: #c54242; font-weight: bold; }
+    .account-content { flex-grow: 1; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 40px; }
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+    .account-content h1 { font-size: 2rem; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 30px; color: #111; }
+    .info-group { margin-bottom: 25px; }
+    .info-group label { display: block; font-size: 0.9rem; color: #777; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; }
+    .info-group p { font-size: 1.2rem; color: #111; margin: 0; }
+</style>
+</head>
+<body>
+<header>
+    <div class="logo"><a href="home.html"><img src="imagens/logo.jpeg" alt="ByteStore Logo"></a></div>
+    <nav>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="masculina.html">Masculina</a></li>
+            <li><a href="feminina.html">Feminina</a></li>
+            <li><a href="carrinho.html">Carrinho</a></li>
+            <li><a href="minha_conta.html">Minha Conta</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="account-container">
+        <aside class="account-nav">
+            <ul>
+                <li><a id="nav-conta" class="active">Minha Conta</a></li>
+                <li><a id="nav-endereco">Endereço</a></li>
+                <li><a id="nav-pedidos">Meus Pedidos</a></li>
+                <li><a id="logout-link">Sair</a></li>
+            </ul>
+        </aside>
+        <section class="account-content">
+            <div id="section-conta" class="content-section active">
+                <h1 id="welcome-title">Carregando...</h1>
+                <div class="info-group"><label>Nome Completo</label><p id="user-name">...</p></div>
+                <div class="info-group"><label>Email de Cadastro</label><p id="user-email">...</p></div>
+            </div>
+            <div id="section-endereco" class="content-section">
+                <h1>Meu Endereço</h1>
+                <div class="info-group"><label>CEP</label><p id="user-cep">...</p></div>
+                <div class="info-group"><label>Estado</label><p id="user-estado">...</p></div>
+                <div class="info-group"><label>Bairro</label><p id="user-bairro">...</p></div>
+                <div class="info-group"><label>Quadra/Rua e Número</label><p id="user-quadra">...</p></div>
+                <div class="info-group"><label>Complemento</label><p id="user-complemento">...</p></div>
+            </div>
+            <div id="section-pedidos" class="content-section">
+                <h1>Meus Pedidos</h1>
+                <p>Nenhum pedido encontrado.</p>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+    if (!usuarioLogado) { window.location.href = 'minha_conta.html'; return; }
+    document.getElementById('welcome-title').textContent = `Olá, ${usuarioLogado.nome.split(' ')[0]}`;
+    document.getElementById('user-name').textContent = usuarioLogado.nome || 'Não informado';
+    document.getElementById('user-email').textContent = usuarioLogado.email || 'Não informado';
+    document.getElementById('user-cep').textContent = usuarioLogado.cep || 'Não informado';
+    document.getElementById('user-estado').textContent = usuarioLogado.estado || 'Não informado';
+    document.getElementById('user-bairro').textContent = usuarioLogado.bairro || 'Não informado';
+    document.getElementById('user-quadra').textContent = usuarioLogado.quadra || 'Não informado';
+    document.getElementById('user-complemento').textContent = usuarioLogado.complemento || 'Não informado';
+    const navLinks = document.querySelectorAll('.account-nav a');
+    const contentSections = document.querySelectorAll('.content-section');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            if (this.id === 'logout-link') return;
+            event.preventDefault();
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            this.classList.add('active');
+            const targetSection = `section-${this.id.split('-')[1]}`;
+            contentSections.forEach(section => {
+                section.style.display = section.id === targetSection ? 'block' : 'none';
+            });
+        });
+    });
+    document.getElementById('logout-link').addEventListener('click', function() {
+        localStorage.removeItem('usuarioLogado');
+        alert('Você foi desconectado.');
+        window.location.href = 'minha_conta.html';
+    });
+});
+</script>
+</body>
+</html>

@@ -4,17 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Minha Conta - ByteStore</title>
-<link rel="stylesheet" href="../bytestore-frontend/css/style.css">
-<link rel="stylesheet" href="../bytestore-frontend/css/minha_conta.css">
+<link rel="stylesheet" href="css/style.css">
+<style>
+    .account-main { max-width: 500px; margin: 80px auto; padding: 40px; text-align: center; background-color: #fff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+    .account-main h1 { margin-bottom: 30px; font-size: 2rem; }
+    .tabs { display: flex; margin-bottom: 30px; }
+    .tab-btn { flex: 1; padding: 15px; background-color: #c8e6c9; color: #333; border: none; cursor: pointer; font-weight: 700; font-size: 1rem; transition: background-color 0.3s; border-top: 3px solid transparent; border-bottom: 3px solid #ddd; }
+    .tab-btn.active { background-color: #4CAF50; color: white; border-bottom: 3px solid #4CAF50; }
+    .tab-content form { display: flex; flex-direction: column; gap: 15px; }
+    .tab-content input { padding: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
+    .tab-content input:focus { border-color: #4CAF50; outline: none; box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+    .tab-content button { padding: 15px; background-color: #b8f29b; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; transition: background-color 0.3s; font-size: 1.1rem; color: #111; }
+    .tab-content button:hover { background-color: #a3d987; }
+</style>
 </head>
 <body>
 
 <header>
-    <div class="logo">
-        <a href="home.html">
-            <img src="../bytestore-frontend/imagens/logo.jpeg" alt="ByteStore Logo">
-        </a>
-    </div>
+    <div class="logo"><a href="home.html"><img src="imagens/logo.jpeg" alt="ByteStore Logo"></a></div>
     <nav>
         <ul>
             <li><a href="home.html">Home</a></li>
@@ -27,16 +34,12 @@
     </nav>
 </header>
 
-<main style="max-width: 500px; margin: 50px auto; padding: 20px;">
-
+<main class="account-main">
     <h1>Minha Conta</h1>
-
     <div class="tabs">
         <button class="tab-btn active" onclick="openTab(event, 'login')">Login</button>
         <button class="tab-btn" onclick="openTab(event, 'cadastro')">Cadastro</button>
     </div>
-
-    <!-- Formulário de Login -->
     <div id="login" class="tab-content" style="display:block;">
         <form id="loginForm">
             <input type="email" id="loginEmail" placeholder="Email" required>
@@ -44,19 +47,67 @@
             <button type="submit">Entrar</button>
         </form>
     </div>
-
-    <!-- Formulário de Cadastro -->
-    <div id="cadastro" class="tab-content">
+    <div id="cadastro" class="tab-content" style="display:none;">
         <form id="cadastroForm">
             <input type="text" id="cadastroNome" placeholder="Nome Completo" required>
             <input type="email" id="cadastroEmail" placeholder="Email" required>
             <input type="password" id="cadastroSenha" placeholder="Senha" required>
+            <hr>
+            <input type="text" id="cadastroCep" placeholder="CEP">
+            <input type="text" id="cadastroEstado" placeholder="Estado">
+            <input type="text" id="cadastroBairro" placeholder="Bairro">
+            <input type="text" id="cadastroQuadra" placeholder="Quadra/Rua e Número">
+            <input type="text" id="cadastroComplemento" placeholder="Complemento (Apto, etc)">
             <button type="submit">Cadastrar</button>
         </form>
     </div>
-
 </main>
 
-<script src="../js/minha_conta.js"></script>
+<script>
+if (localStorage.getItem('usuarioLogado')) { window.location.href = 'perfil.html'; }
+function openTab(evt, tabName) {
+    document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
+    document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.classList.add("active");
+}
+document.addEventListener("DOMContentLoaded", () => {
+    const cadastroForm = document.getElementById("cadastroForm");
+    if (cadastroForm) {
+        cadastroForm.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const userData = {
+                nome: document.getElementById("cadastroNome").value, email: document.getElementById("cadastroEmail").value, senha: document.getElementById("cadastroSenha").value,
+                cep: document.getElementById("cadastroCep").value, estado: document.getElementById("cadastroEstado").value, bairro: document.getElementById("cadastroBairro").value,
+                quadra: document.getElementById("cadastroQuadra").value, complemento: document.getElementById("cadastroComplemento").value
+            };
+            try {
+                const response = await fetch('http://localhost:3000/cadastro', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(userData) });
+                const result = await response.json();
+                if (response.ok) {
+                    alert('Cadastro realizado com sucesso!');
+                    cadastroForm.reset();
+                    document.querySelector('.tab-btn').click();
+                } else { alert(`Erro: ${result.error}`); }
+            } catch (error) { alert('Falha na comunicação com o servidor.'); }
+        });
+    }
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            try {
+                const response = await fetch('http://localhost:3000/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: document.getElementById("loginEmail").value, senha: document.getElementById("loginSenha").value }) });
+                const result = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('usuarioLogado', JSON.stringify(result.user));
+                    window.location.href = 'perfil.html';
+                } else { alert(`Erro: ${result.error}`); }
+            } catch (error) { alert('Falha na comunicação com o servidor.'); }
+        });
+    }
+});
+</script>
+
 </body>
 </html>
