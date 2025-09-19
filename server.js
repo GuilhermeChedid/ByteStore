@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('./database.js'); // Garante que você está usando o database.js com as colunas de endereço
+const db = require('./database.js');
 
 const app = express();
 const port = 3000;
@@ -8,7 +8,7 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 
-// --- Rota de Cadastro CORRIGIDA ---
+
 app.post('/cadastro', (req, res) => {
     // Coleta todos os dados do corpo da requisição
     const { nome, email, senha, cep, estado, bairro, quadra, complemento } = req.body;
