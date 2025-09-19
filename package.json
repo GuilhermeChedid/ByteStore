@@ -4,7 +4,8 @@
   "description": "(PROJETO)",
   "main": "database.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +14,13 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "sqlite3": "^5.1.7"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuilhermeChedid/ByteStore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GuilhermeChedid/ByteStore/issues"
+  },
+  "homepage": "https://github.com/GuilhermeChedid/ByteStore#readme"
 }

@@ -19,22 +19,26 @@
             <li><a href="home.html">Home</a></li>
             <li><a href="masculina.html">Masculina</a></li>
             <li><a href="feminina.html">Feminina</a></li>
+            <li><a href="carrinho.html">Carrinho</a></li>
             <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="minha_conta.html">Minha Conta</a></li>
         </ul>
     </nav>
 </header>
 
 <main>
     <section id="carrinho">
-        <h2>Carrinho</h2>
-        <p id="cart-message" class="cart-message"></p>
-
+        <h2 style="display: flex; align-items: center;">
+            Carrinho
+            <img src="../bytestore-frontend/imagens/carrinhoPreto.png" alt="Ícone Carrinho" style="width: 60px; margin-left: 1px;">
+        </h2>
         <ul id="cartItems"></ul>
         <p>Total: R$ <span id="totalPrice">0.00</span></p>
         <button onclick="showPaymentOptions()">Finalizar Compra</button>
     </section>
 
     <section id="pagamento" style="display:none; margin-top:30px;">
+
         <h2>Pagamento</h2>
         <div class="payment-methods">
             <button onclick="showForm('cartao')">Cartão</button>
