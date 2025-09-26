@@ -22,6 +22,5 @@
   "bugs": {
     "url": "https://github.com/GuilhermeChedid/ByteStore/issues"
   },
-  "homepage": "https://github.com/GuilhermeChedid/ByteStore#readme",
-  "devDependencies": {}
+  "homepage": "https://github.com/GuilhermeChedid/ByteStore#readme"
 }

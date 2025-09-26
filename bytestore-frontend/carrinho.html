@@ -32,9 +32,11 @@
             Carrinho
             <img src="../bytestore-frontend/imagens/carrinhoPreto.png" alt="Ícone Carrinho" style="width: 60px; margin-left: 1px;">
         </h2>
+        <!-- Mensagem de alerta do carrinho -->
+        <div id="cart-message" class="cart-message"></div>
         <ul id="cartItems"></ul>
         <p>Total: R$ <span id="totalPrice">0.00</span></p>
-        <button onclick="showPaymentOptions()">Finalizar Compra</button>
+    <button id="finalizarCompraBtn" onclick="showPaymentOptions()">Finalizar Compra</button>
     </section>
 
     <section id="pagamento" style="display:none; margin-top:30px;">

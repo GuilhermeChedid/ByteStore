@@ -1,7 +1,20 @@
 // =====================
 // CARRINHO
 // =====================
-let cart = JSON.parse(localStorage.getItem('cart')) || [];
+function safeGetCart() {
+    try {
+        const raw = localStorage.getItem('cart');
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch (e) {
+        console.warn('Carrinho no localStorage inválido. Limpando...', e);
+        localStorage.removeItem('cart');
+        return [];
+    }
+}
+
+let cart = safeGetCart();
 
 // Renderiza o carrinho
 function renderCart() {
@@ -40,7 +53,7 @@ function renderCart() {
 
 // Adiciona produto ao carrinho
 function addToCart(nome, preco, imagem = "img/default.jpg", tamanho = "M") {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cart = safeGetCart();
     const itemExistente = cart.find(item => item.nome === nome && item.tamanho === tamanho);
 
     if (itemExistente) {
@@ -86,20 +99,31 @@ function removeItem(index) {
 // Mostrar seção de pagamento com verificação
 function showPaymentOptions() {
     const messageElement = document.getElementById('cart-message');
-    
-    // Esconde a mensagem e as opções de pagamento antes de qualquer verificação
-    messageElement.style.display = 'none';
     const pagamento = document.getElementById('pagamento');
+
+    // Garante que usamos o estado mais recente do carrinho
+    const currentCart = JSON.parse(localStorage.getItem('cart')) || cart || [];
+
+    // Esconde a mensagem e as opções de pagamento antes de qualquer verificação
+    if (messageElement) messageElement.style.display = 'none';
     if (pagamento) pagamento.style.display = 'none';
 
     // Verifica se o carrinho está vazio
-    if (cart.length === 0) {
-        // Se estiver vazio, define o texto da mensagem e a exibe
-        messageElement.textContent = "Você precisa adicionar algum produto no carrinho para finalizar compra";
-        messageElement.style.display = 'block';
+    if (currentCart.length === 0) {
+        // Se estiver vazio, define o texto da mensagem e a exibe (se existir)
+        if (messageElement) {
+            messageElement.textContent = "Você precisa adicionar algum produto no carrinho para finalizar compra";
+            messageElement.style.display = 'block';
+        } else {
+            alert('Você precisa adicionar algum produto no carrinho para finalizar a compra.');
+        }
     } else {
         // Caso contrário (se tiver itens), mostra as opções de pagamento
-        if (pagamento) pagamento.style.display = 'block';
+        if (pagamento) {
+            pagamento.style.display = 'block';
+            // Traz a seção de pagamento para a visão do usuário
+            pagamento.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 }
 
@@ -176,6 +200,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Renderiza o carrinho ao carregar a página
     renderCart();
+
+    // Fallback: garantir que o botão finalize chame a função mesmo sem atributo inline
+    const finalizarBtn = document.getElementById('finalizarCompraBtn');
+    if (finalizarBtn) {
+        finalizarBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPaymentOptions();
+        });
+    }
 });
 
 // Alternar entre abas Login e Cadastro
