@@ -1,6 +1,72 @@
 // =====================
 // CARRINHO
 // =====================
+// Limpeza imediata de parâmetros e hash da URL assim que o script carrega
+(() => {
+    try {
+        if ((window.location.search && window.location.search !== '') || (window.location.hash && window.location.hash !== '')) {
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    } catch {}
+})();
+
+// =====================
+// TOAST UTIL (mensagem flutuante)
+// =====================
+function showToast(message, type = 'success', duration = 3000) {
+    try {
+        // Evita múltiplos toasts simultâneos
+        const existing = document.querySelector('.custom-message.show');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.className = `custom-message ${type}`; // classes já estilizadas em css/style.css
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        // Força reflow para ativar transição
+        void toast.offsetWidth;
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 400);
+        }, duration);
+    } catch (err) {
+        // Fallback
+        console.warn('Falha ao exibir toast:', err);
+        alert(message);
+    }
+}
+
+// Agenda um toast para a próxima página (pós-redirect)
+function setNextToast(message, type = 'success', duration = 2500) {
+    try {
+        localStorage.setItem('nextToast', JSON.stringify({ message, type, duration }));
+    } catch {}
+}
+
+// Ao carregar qualquer página que importe este script, verifica toasts pendentes
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const raw = localStorage.getItem('nextToast');
+        if (raw) {
+            const data = JSON.parse(raw);
+            if (data && data.message) {
+                showToast(data.message, data.type || 'success', data.duration || 2500);
+            }
+            localStorage.removeItem('nextToast');
+        }
+    } catch {}
+    // Limpa parâmetros da URL (evita mensagens aparecendo na URL)
+    try {
+        if (window.location.search && window.history && window.history.replaceState) {
+            const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }
+    } catch {}
+});
+
 function safeGetCart() {
     try {
         const raw = localStorage.getItem('cart');
@@ -34,21 +100,46 @@ function renderCart() {
 
         li.innerHTML = `
             <img src="${item.imagem}" alt="${item.nome}" class="miniatura">
-            <span>${item.nome} - R$ ${item.preco.toFixed(2)} x ${item.qty || 1}</span>
-            
+            <div class="item-details">
+                <span>${item.nome}</span>
+                <span>R$ ${item.preco.toFixed(2)}</span>
+            </div>
+            <div class="quantity-editor">
+                <button class="quantity-btn" onclick="decreaseQuantity(${index})">-</button>
+                <input type="text" class="quantity-input" value="${item.qty || 1}" readonly>
+                <button class="quantity-btn" onclick="increaseQuantity(${index})">+</button>
+            </div>
             <select onchange="updateSize(${index}, this.value)" class="size-select">
                 <option value="P" ${item.tamanho === "P" ? "selected" : ""}>P</option>
                 <option value="M" ${item.tamanho === "M" ? "selected" : ""}>M</option>
                 <option value="G" ${item.tamanho === "G" ? "selected" : ""}>G</option>
                 <option value="GG" ${item.tamanho === "GG" ? "selected" : ""}>GG</option>
             </select>
-
             <button onclick="removeItem(${index})" class="remove-btn">Remover</button>
         `;
         cartItems.appendChild(li);
     });
 
     totalPrice.textContent = total.toFixed(2);
+}
+
+// Aumenta a quantidade do item
+function increaseQuantity(index) {
+    cart[index].qty = (cart[index].qty || 1) + 1;
+    localStorage.setItem('cart', JSON.stringify(cart));
+    renderCart();
+}
+
+// Diminui a quantidade do item
+function decreaseQuantity(index) {
+    if (cart[index].qty > 1) {
+        cart[index].qty -= 1;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCart();
+    } else {
+        // Se a quantidade for 1, remove o item
+        removeItem(index);
+    }
 }
 
 // Adiciona produto ao carrinho
@@ -178,25 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Login
-    const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        loginForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-            const email = document.getElementById("loginEmail").value;
-            alert(`Login realizado com: ${email}`);
-        });
-    }
-
-    // Cadastro
-    const cadastroForm = document.getElementById("cadastroForm");
-    if (cadastroForm) {
-        cadastroForm.addEventListener("submit", function (e) {
-            e.preventDefault();
-            const nome = document.getElementById("cadastroNome").value;
-            alert(`Cadastro realizado com sucesso!\nBem-vindo(a), ${nome}`);
-        });
-    }
+    // Login e Cadastro são tratados em bytestore-frontend/minha_conta.html com toasts e validação.
 
     // Renderiza o carrinho ao carregar a página
     renderCart();

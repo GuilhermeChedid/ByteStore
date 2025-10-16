@@ -54,6 +54,7 @@
                 <h1 id="welcome-title">Carregando...</h1>
                 <div class="info-group"><label>Nome Completo</label><p id="user-name">...</p></div>
                 <div class="info-group"><label>Email de Cadastro</label><p id="user-email">...</p></div>
+                <!-- Seção de Alterar Senha removida a pedido do usuário -->
             </div>
             <div id="section-endereco" class="content-section">
                 <h1>Meu Endereço</h1>
@@ -71,6 +72,7 @@
     </div>
 </main>
 
+<script src="../js/script.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
@@ -99,9 +101,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     document.getElementById('logout-link').addEventListener('click', function() {
         localStorage.removeItem('usuarioLogado');
-        alert('Você foi desconectado.');
+        try { localStorage.setItem('logoutAt', String(Date.now())); } catch {}
+        if (typeof setNextToast === 'function') {
+            setNextToast('Você foi desconectado.', 'success', 2000);
+        }
         window.location.href = 'minha_conta.html';
     });
+
+    // Seção de Alterar Senha removida a pedido do usuário
 });
 </script>
 </body>

@@ -26,6 +26,12 @@
     border-bottom: 1px solid #ddd;
 }
 
+/* Garantir que os itens do carrinho fiquem agrupados à esquerda
+   (evita espaçamento exagerado entre colunas e melhora o alinhamento dos botões +/-) */
+#cartItems li.cart-item {
+    justify-content: flex-start;
+}
+
 #totalPrice {
     font-weight: 700;
     color: #111;
@@ -155,15 +161,65 @@
 .cart-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 15px; /* alinhado com branchTeste */
     margin-bottom: 8px;
+    flex-wrap: wrap; /* quebra em duas linhas se necessário */
 }
 
 .miniatura {
-    width: 40px;
-    height: 40px;
+    width: 50px; /* alinhado com branchTeste */
+    height: 50px; /* alinhado com branchTeste */
     object-fit: cover;
     border-radius: 4px;
+}
+
+.item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 150px;
+    flex: 1; /* ocupa o espaço disponível e mantém os controles alinhados */
+}
+
+.quantity-editor {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    /* Sobe levemente o bloco de quantidade (+/-) */
+    transform: translateY(-3px);
+}
+
+.quantity-btn {
+    background-color: #b8f29b;
+    color: #111;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.3s;
+    /* Evitar herdar margin/padding de #carrinho button */
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-btn:hover {
+    background-color: #9fd987;
+}
+
+.quantity-input {
+    width: 50px; /* alinhado com branchTeste */
+    text-align: center;
+    border: 1px solid #ccc; /* alinhado com branchTeste */
+    border-radius: 4px;
+    padding: 5px;
+    height: 32px; /* casa com os botões para alinhar verticalmente */
+    font-weight: bold;
 }
 
 .size-select {

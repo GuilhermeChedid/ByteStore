@@ -177,7 +177,8 @@ header nav ul li a:hover {
     font-size: 1.1rem;
     font-weight: 600;
     color: white;
-    z-index: 1001;
+    z-index: 5000; /* Garantir que fique acima de overlays */
+    pointer-events: none; /* Não bloquear cliques no conteúdo abaixo */
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.4s ease, top 0.4s ease, visibility 0.4s ease;
@@ -192,7 +193,8 @@ header nav ul li a:hover {
 
 /* Cor para mensagens de sucesso */
 .custom-message.success {
-    background-color: #4CAF50; /* Verde */
+    background-color: #b8f29b; /* Verde ByteStore */
+    color: #111; /* Texto escuro para melhor contraste nessa cor */
 }
 
 /* Cor para mensagens de erro */
