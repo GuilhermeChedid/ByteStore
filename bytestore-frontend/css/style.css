@@ -11,8 +11,7 @@ header nav ul {
 header nav ul li a {
     text-decoration: none;
     color: #fff;
-    /* Altere a linha abaixo de 600 para 700 */
-    font-weight: 700; /* <<< ALTERAÇÃO AQUI */
+    font-weight: 700;
     padding: 6px 12px;
     border-radius: 6px;
     transition: 0.3s;
@@ -23,7 +22,75 @@ header nav ul li a:hover {
     background-color: #b8f29b;
 }
 
-/* RESTANTE DO CÓDIGO... */
+/* Popup de finalização de compra */
+.finalizacao-popup {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+.finalizacao-popup.show {
+    visibility: visible;
+    opacity: 1;
+}
+.finalizacao-popup .popup-content {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    padding: 40px 32px 32px 32px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    animation: popup-bounce 0.4s;
+}
+.finalizacao-popup .popup-content h2 {
+    color: #28a745;
+    font-size: 2rem;
+    margin-bottom: 18px;
+}
+.finalizacao-popup .popup-content p {
+    color: #222;
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+}
+.finalizacao-popup .popup-content button {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.finalizacao-popup .popup-content button:hover {
+    background: #218838;
+}
+.finalizacao-popup .close-popup {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    background: none;
+    border: none;
+    font-size: 1.0rem; 
+    color: #888;
+    cursor: pointer;
+    padding: 1px 2px;
+    line-height: 1;
+}
+@keyframes popup-bounce {
+    0% { transform: scale(0.7); opacity: 0; }
+    60% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); }
+}
 
 /* Reset básico */
 * {

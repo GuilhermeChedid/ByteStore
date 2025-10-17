@@ -244,28 +244,75 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cartaoForm) {
         cartaoForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (cart.length === 0) { alert('Carrinho vazio!'); return; }
-            alert('Compra finalizada com Cartão!');
+            e.stopPropagation();
+            if (cart.length === 0) { alert('Carrinho vazio!'); return false; }
+            if (!document.getElementById('consentimento-cartao').checked) {
+                alert('Você precisa aceitar a Política de Privacidade.');
+                return false;
+            }
+            // Validação manual do nome do titular
+            const nomeInput = document.getElementById('nome');
+            const nome = nomeInput.value.trim();
+            const nomeValido = /^[A-Za-zÀ-ú\s]{3,}$/.test(nome) && !/(.)\1{2,}/.test(nome.replace(/\s/g, '')) && nome.split(' ').length > 1;
+            if (!nomeValido) {
+                alert('Nome inválido. Use nome e sobrenome reais, sem repetições.');
+                nomeInput.focus();
+                return false;
+            }
+            // Salva os itens do carrinho em 'pedidos' antes de limpar
+            let pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+            if (cart.length > 0) {
+                pedidos.push({
+                    data: new Date().toLocaleString(),
+                    itens: [...cart]
+                });
+                localStorage.setItem('pedidos', JSON.stringify(pedidos));
+            }
+            mostrarPopupFinalizacao();
             cart = [];
             localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
+            // Limpa dados sensíveis do cartão
             cartaoForm.reset();
             closeForms();
+            return false;
         });
     }
-
     // PIX
     const pixForm = document.getElementById('pixForm');
     if (pixForm) {
         pixForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (cart.length === 0) { alert('Carrinho vazio!'); return; }
-            alert('Compra finalizada via PIX!');
+            e.stopPropagation();
+            if (cart.length === 0) { alert('Carrinho vazio!'); return false; }
+            if (!document.getElementById('consentimento-pix').checked) {
+                alert('Você precisa aceitar a Política de Privacidade.');
+                return false;
+            }
+            // Validação manual do nome do pagador
+            const nomePixInput = document.getElementById('nomePix');
+            const nomePix = nomePixInput.value.trim();
+            const nomePixValido = /^[A-Za-zÀ-ú\s]{3,}$/.test(nomePix) && !/(.)\1{2,}/.test(nomePix.replace(/\s/g, '')) && nomePix.split(' ').length > 1;
+            if (!nomePixValido) {
+                alert('Nome inválido. Use nome e sobrenome reais, sem repetições.');
+                nomePixInput.focus();
+                return false;
+            }
+            // Salva os itens do carrinho em 'pedidos' antes de limpar
+            let pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+            if (cart.length > 0) {
+                pedidos.push({
+                    data: new Date().toLocaleString(),
+                    itens: [...cart]
+                });
+                localStorage.setItem('pedidos', JSON.stringify(pedidos));
+            }
+            mostrarPopupFinalizacao();
             cart = [];
             localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
+            // Limpa dados sensíveis do PIX
             pixForm.reset();
             closeForms();
+            return false;
         });
     }
 

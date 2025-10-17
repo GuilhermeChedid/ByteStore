@@ -12,6 +12,7 @@ const db = new sqlite3.Database('./bytestore.db', (err) => {
             senha TEXT NOT NULL,
             cep TEXT,
             estado TEXT,
+            cidade TEXT,
             bairro TEXT,
             quadra TEXT,
             numero TEXT, 

@@ -56,6 +56,10 @@
     .password-group .toggle-password svg { width: 20px; height: 20px; pointer-events: none; }
     /* Espaçamento consistente quando o formulário de recuperação está visível */
     .forgot-password-form { margin-top: 16px; display: flex; flex-direction: column; gap: 15px; }
+    .info-group { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+    .info-group label { font-weight: 500; font-size: 0.9rem; }
+    .info-group input, .info-group select { padding: 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; width: 100%; }
+    .info-group input:focus, .info-group select:focus { border-color: #4CAF50; outline: none; box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
 </style>
 </head>
 <body>
@@ -151,11 +155,63 @@
             </div>
             <small id="cadastroSenhaConfirmError" class="form-error" style="display:none;"></small>
             <hr>
-            <input type="text" id="cadastroCep" placeholder="CEP">
-            <input type="text" id="cadastroEstado" placeholder="Estado">
-            <input type="text" id="cadastroBairro" placeholder="Bairro">
-            <input type="text" id="cadastroQuadra" placeholder="Quadra/Rua e Número">
-            <input type="text" id="cadastroComplemento" placeholder="Complemento (Apto, etc)">
+            <div class="info-group">
+                <label for="cadastro-cep">CEP</label>
+                <input type="text" id="cadastro-cep" name="cep" required pattern="\d{5}-?\d{3}" maxlength="9" placeholder="00000-000">
+            </div>
+            <div class="info-group">
+                <label for="cadastro-estado">Estado</label>
+                <select id="cadastro-estado" name="estado" required>
+                    <option value="">Selecione o Estado</option>
+                    <option value="AC">Acre (AC)</option>
+                    <option value="AL">Alagoas (AL)</option>
+                    <option value="AP">Amapá (AP)</option>
+                    <option value="AM">Amazonas (AM)</option>
+                    <option value="BA">Bahia (BA)</option>
+                    <option value="CE">Ceará (CE)</option>
+                    <option value="DF">Distrito Federal (DF)</option>
+                    <option value="ES">Espírito Santo (ES)</option>
+                    <option value="GO">Goiás (GO)</option>
+                    <option value="MA">Maranhão (MA)</option>
+                    <option value="MT">Mato Grosso (MT)</option>
+                    <option value="MS">Mato Grosso do Sul (MS)</option>
+                    <option value="MG">Minas Gerais (MG)</option>
+                    <option value="PA">Pará (PA)</option>
+                    <option value="PB">Paraíba (PB)</option>
+                    <option value="PR">Paraná (PR)</option>
+                    <option value="PE">Pernambuco (PE)</option>
+                    <option value="PI">Piauí (PI)</option>
+                    <option value="RJ">Rio de Janeiro (RJ)</option>
+                    <option value="RN">Rio Grande do Norte (RN)</option>
+                    <option value="RS">Rio Grande do Sul (RS)</option>
+                    <option value="RO">Rondônia (RO)</option>
+                    <option value="RR">Roraima (RR)</option>
+                    <option value="SC">Santa Catarina (SC)</option>
+                    <option value="SP">São Paulo (SP)</option>
+                    <option value="SE">Sergipe (SE)</option>
+                    <option value="TO">Tocantins (TO)</option>
+                </select>
+            </div>
+            <div class="info-group">
+                <label for="cadastro-cidade">Cidade</label>
+                <input type="text" id="cadastro-cidade" name="cidade" required pattern="[A-Za-zÀ-ú\s]{3,}" maxlength="40" placeholder="Digite a cidade">
+            </div>
+            <div class="info-group">
+                <label for="cadastro-bairro">Bairro</label>
+                <input type="text" id="cadastro-bairro" name="bairro" required pattern="[A-Za-zÀ-ú\s()]{3,}" maxlength="60" placeholder="Digite o bairro">
+            </div>
+            <div class="info-group">
+                <label for="cadastro-quadra">Quadra/Rua e Número</label>
+                <input type="text" id="cadastro-quadra" name="quadra" required maxlength="60">
+            </div>
+            <div class="info-group">
+                <label for="cadastro-complemento">Complemento</label>
+                <input type="text" id="cadastro-complemento" name="complemento" maxlength="50" pattern="[A-Za-zÀ-ú0-9\s()\-.,]{0,50}">
+            </div>
+            <label style="margin-top:16px; display:block;">
+              <input type="checkbox" id="consentimento-cadastro" required>
+              Li e concordo com a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a>.
+            </label>
             <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
         </form>
     </div>
@@ -344,6 +400,29 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
     }
+
+    document.getElementById('cadastro-cep').addEventListener('blur', function() {
+        const cep = this.value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('cadastro-estado').value = data.uf || '';
+                        document.getElementById('cadastro-cidade').value = data.localidade || '';
+                        document.getElementById('cadastro-bairro').value = data.bairro || '';
+                        if (data.logradouro) {
+                            document.getElementById('cadastro-quadra').value = data.logradouro;
+                        }
+                    } else {
+                        alert('CEP não encontrado.');
+                    }
+                })
+                .catch(() => {
+                    alert('Erro ao buscar CEP.');
+                });
+        }
+    });
 });
 </script>
 

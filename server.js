@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./database.js');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const port = 3000;
@@ -15,8 +16,7 @@ function isAllowedEmail(email) {
 }
 
 
-app.post('/cadastro', (req, res) => {
-    // Coleta todos os dados do corpo da requisição
+app.post('/cadastro', async (req, res) => {
     const { nome, email, senha, cep, estado, bairro, quadra, complemento } = req.body;
 
     // Validação básica para os campos essenciais
@@ -29,21 +29,23 @@ app.post('/cadastro', (req, res) => {
         return res.status(400).json({ error: 'Email inválido. Permitidos: @gmail.com, @gmail.com.br, @hotmail.com, @outlook.com, @outlook.com.br, @yahoo.com, @yahoo.com.br' });
     }
 
-    const sql = `INSERT INTO usuarios (nome, email, senha, cep, estado, bairro, quadra, complemento)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-    
-    // Parâmetros na ordem correta das colunas
-    const params = [nome, email, senha, cep || null, estado || null, bairro || null, quadra || null, complemento || null];
+    try {
+        const senhaCriptografada = await bcrypt.hash(senha, 10);
+        const sql = `INSERT INTO usuarios (nome, email, senha, cep, estado, bairro, quadra, complemento)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        const params = [nome, email, senhaCriptografada, cep || null, estado || null, bairro || null, quadra || null, complemento || null];
 
-    db.run(sql, params, function(err) {
-        if (err) {
-            // Se o e-mail já existir, o erro de "UNIQUE constraint" será capturado aqui
-            console.error("Erro no banco de dados:", err.message);
-            return res.status(400).json({ "error": "Não foi possível realizar o cadastro. O e-mail pode já estar em uso." });
-        }
-        // Se a inserção for bem-sucedida
-        res.status(201).json({ "message": "Usuário cadastrado com sucesso!", "userId": this.lastID });
-    });
+        db.run(sql, params, function(err) {
+            if (err) {
+                console.error("Erro no banco de dados:", err.message);
+                return res.status(400).json({ "error": "Não foi possível realizar o cadastro. O e-mail pode já estar em uso." });
+            }
+            res.status(201).json({ "message": "Usuário cadastrado com sucesso!", "userId": this.lastID });
+        });
+    } catch (err) {
+        console.error('Erro ao criptografar senha:', err.message);
+        return res.status(500).json({ error: 'Erro interno ao cadastrar usuário.' });
+    }
 });
 
 
@@ -101,6 +103,42 @@ app.post('/alterar-senha', (req, res) => {
             if (updateErr) { console.error('Erro no banco:', updateErr.message); return res.status(500).json({ error: 'Erro interno do servidor.' }); }
             res.status(200).json({ message: 'Senha alterada com sucesso.' });
         });
+    });
+});
+
+// Atualizar endereço do usuário
+app.post('/atualizar-endereco', (req, res) => {
+    const { email, cep, estado, cidade, bairro, quadra, complemento } = req.body;
+    if (!email) {
+        return res.status(400).json({ error: 'Email é obrigatório para atualizar endereço.' });
+    }
+    const sql = `UPDATE usuarios SET cep = ?, estado = ?, cidade = ?, bairro = ?, quadra = ?, complemento = ? WHERE email = ?`;
+    db.run(sql, [cep, estado, cidade, bairro, quadra, complemento, email], function(err) {
+        if (err) {
+            console.error('Erro ao atualizar endereço:', err.message);
+            return res.status(500).json({ error: 'Erro ao atualizar endereço.' });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+        res.status(200).json({ message: 'Endereço atualizado com sucesso.' });
+    });
+});
+
+// Solicitar exclusão de usuário
+app.post('/solicitar-exclusao', (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email é obrigatório.' });
+    const sql = 'DELETE FROM usuarios WHERE email = ?';
+    db.run(sql, [email], function(err) {
+        if (err) {
+            console.error('Erro ao excluir usuário:', err.message);
+            return res.status(500).json({ error: 'Erro ao excluir usuário.' });
+        }
+        if (this.changes === 0) {
+            return res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+        res.status(200).json({ message: 'Usuário excluído com sucesso.' });
     });
 });
 
