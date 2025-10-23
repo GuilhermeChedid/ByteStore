@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nota Fiscal - ByteStore</title>
+<link rel="icon" href="imagens/logo.jpeg">
+<style>
+    body {
+        font-family: "Poppins", sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+    .nota-container {
+        max-width: 800px;
+        margin: 40px auto;
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        position: relative;
+    }
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #42ff52;
+        padding-bottom: 10px;
+    }
+    header img {
+        width: 120px;
+        border-radius: 8px;
+    }
+    h1 {
+        color: #222;
+        font-size: 1.8rem;
+    }
+    .info {
+        margin-top: 20px;
+        line-height: 1.6;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 25px;
+    }
+    table th, table td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+    }
+    table th {
+        background-color: #42ff52;
+        color: #000;
+    }
+    .total {
+        text-align: right;
+        margin-top: 15px;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+    .botoes {
+        margin-top: 25px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    button {
+        background: #42ff52;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+    button:hover {
+        background: #42ff52;
+    }
+    /* Popup */
+    .popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 999;
+    }
+    .popup-content {
+        background: white;
+        padding: 25px 40px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div id="popup" class="popup" style="display:none;">
+    <div class="popup-content">
+        <h2>Pagamento confirmado com sucesso!</h2>
+        <p>Obrigado por comprar na <strong>ByteStore</strong>.</p>
+        <button onclick="fecharPopup()">Fechar</button>
+    </div>
+</div>
+
+<div class="nota-container" id="notaFiscal">
+    <header>
+        <img src="imagens/logo.jpeg" alt="ByteStore Logo">
+        <h1>Nota Fiscal Eletrônica</h1>
+    </header>
+
+    <div class="info">
+        <p><strong>Número da NF:</strong> <span id="nfNumero">NF-0000</span></p>
+        <p><strong>Data:</strong> <span id="nfData"></span></p>
+        <p><strong>Método de Pagamento:</strong> <span id="metodo"></span></p>
+    </div>
+
+    <table id="tabelaItens">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Tamanho</th>
+                <th>Qtd</th>
+                <th>Preço (R$)</th>
+                <th>Total (R$)</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <p class="total">Total: R$ <span id="valorTotal">0.00</span></p>
+
+    <div class="botoes">
+        <button onclick="baixarPDF()">📄 Baixar Nota Fiscal (PDF)</button>
+        <button onclick="window.close()">Fechar</button>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("orderId");
+    const method = params.get("method") === "card" ? "Cartão" : "PIX";
+
+    document.getElementById("metodo").textContent = method;
+
+    let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    const order = orders.find(o => o.id === orderId);
+
+    if (order) {
+        document.getElementById("nfNumero").textContent = order.nf;
+        document.getElementById("nfData").textContent = new Date(order.data).toLocaleString("pt-BR");
+        const tbody = document.querySelector("#tabelaItens tbody");
+        let total = 0;
+        order.itens.forEach(item => {
+            const linha = document.createElement("tr");
+            const subtotal = item.preco * (item.qty || 1);
+            linha.innerHTML = `
+                <td>${item.nome}</td>
+                <td>${item.tamanho || "-"}</td>
+                <td>${item.qty || 1}</td>
+                <td>${item.preco.toFixed(2)}</td>
+                <td>${subtotal.toFixed(2)}</td>
+            `;
+            tbody.appendChild(linha);
+            total += subtotal;
+        });
+        document.getElementById("valorTotal").textContent = total.toFixed(2);
+        localStorage.setItem("cart", "[]");
+        mostrarPopup();
+    }
+});
+
+function mostrarPopup() {
+    document.getElementById("popup").style.display = "flex";
+}
+
+function fecharPopup() {
+    document.getElementById("popup").style.display = "none";
+}
+
+function baixarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const logo = new Image();
+    logo.src = "imagens/logo.jpeg";
+    logo.onload = () => {
+        doc.addImage(logo, "JPEG", 10, 10, 30, 20);
+        doc.setFontSize(16);
+        doc.text("ByteStore - Nota Fiscal", 50, 20);
+        doc.setFontSize(12);
+        doc.text(`Número da NF: ${document.getElementById("nfNumero").textContent}`, 10, 40);
+        doc.text(`Data: ${document.getElementById("nfData").textContent}`, 10, 50);
+        doc.text(`Método de Pagamento: ${document.getElementById("metodo").textContent}`, 10, 60);
+
+        // Cabeçalho da tabela
+        const startY = 70;
+        doc.autoTable({
+            startY,
+            head: [['Produto', 'Tamanho', 'Qtd', 'Preço (R$)', 'Total (R$)']],
+            body: Array.from(document.querySelectorAll("#tabelaItens tbody tr")).map(row =>
+                Array.from(row.children).map(cell => cell.innerText)
+            ),
+            theme: 'grid'
+        });
+
+        doc.text(`Total: R$ ${document.getElementById("valorTotal").textContent}`, 140, doc.lastAutoTable.finalY + 10);
+        doc.save(`${document.getElementById("nfNumero").textContent}.pdf`);
+    };
+}
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+</body>
+</html>
