@@ -1,28 +1,27 @@
 {
   "name": "bytestore",
   "version": "1.0.0",
-  "description": "(PROJETO)",
-  "main": "database.js",
+  "description": "ByteStore - Loja Online de Roupas",
+  "main": "js/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node js/server.js",
+    "dev": "nodemon js/server.js",
+    "setup-db": "node js/setup-database.js"
   },
-  "keywords": [],
+  "keywords": [
+    "ecommerce",
+    "loja",
+    "roupas"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^6.0.0",
+    "express": "^4.18.2",
     "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "sqlite3": "^5.1.7"
+    "mysql2": "^3.6.5",
+    "bcrypt": "^5.1.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GuilhermeChedid/ByteStore.git"
-  },
-  "bugs": {
-    "url": "https://github.com/GuilhermeChedid/ByteStore/issues"
-  },
-  "homepage": "https://github.com/GuilhermeChedid/ByteStore#readme",
-  "type": "commonjs"
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
 }
