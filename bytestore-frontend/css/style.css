@@ -1,0 +1,270 @@
+/* CONTEÚDO ANTERIOR DO SEU ARQUIVO base.css... */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+/* Menu */
+header nav ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+header nav ul li a:hover {
+    color: #111;
+    background-color: #b8f29b;
+}
+
+/* Popup de finalização de compra */
+.finalizacao-popup {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+.finalizacao-popup.show {
+    visibility: visible;
+    opacity: 1;
+}
+.finalizacao-popup .popup-content {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    padding: 40px 32px 32px 32px;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    animation: popup-bounce 0.4s;
+}
+.finalizacao-popup .popup-content h2 {
+    color: #28a745;
+    font-size: 2rem;
+    margin-bottom: 18px;
+}
+.finalizacao-popup .popup-content p {
+    color: #222;
+    font-size: 1.1rem;
+    margin-bottom: 24px;
+}
+.finalizacao-popup .popup-content button {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 32px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.finalizacao-popup .popup-content button:hover {
+    background: #218838;
+}
+.finalizacao-popup .close-popup {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    background: none;
+    border: none;
+    font-size: 1.0rem; 
+    color: #888;
+    cursor: pointer;
+    padding: 1px 2px;
+    line-height: 1;
+}
+@keyframes popup-bounce {
+    0% { transform: scale(0.7); opacity: 0; }
+    60% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #fff;
+    color: #111;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: #111;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header .logo img {
+    height: 60px;
+    width: auto;
+}
+
+/* Menu */
+header nav ul {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+header nav ul li a:hover {
+    color: #111;
+    background-color: #b8f29b;
+}
+
+.search-bar input {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    width: 200px;
+    transition: 0.3s;
+}
+
+.search-bar input:focus {
+    box-shadow: 0 0 5px #b8f29b;
+}
+
+.search-bar button {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    background-color: #b8f29b;
+    color: #111;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.search-bar button:hover {
+    background-color: #9fd987;
+}
+
+.mensagem-adicionado {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.mensagem-adicionado.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Responsivo */
+@media(max-width: 900px) {
+    header nav ul {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+/* Estilo para o texto sobre o carrossel */
+.banner-carousel {
+    position: relative; /* Necessário para posicionar o texto sobre a imagem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-text {
+    position: absolute;
+    z-index: 10; /* Garante que o texto fique na frente das imagens */
+    color: white;
+    text-align: center;
+    max-width: 80%;
+}
+
+.carousel-text h1 {
+    font-family: 'Playfair Display', serif; /* Fonte elegante */
+    font-size: 4rem; /* Tamanho grande para impacto */
+    font-weight: 700;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Sombra para legibilidade */
+}
+
+/* Ajuste para telas menores */
+@media(max-width: 768px) {
+    .carousel-text h1 {
+        font-size: 2.5rem;
+    }
+}
+
+/* --- Estilo da Mensagem Customizada --- */
+.custom-message {
+    position: fixed;
+    top: 20px; /* Posição inicial fora da tela */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    z-index: 5000; /* Garantir que fique acima de overlays */
+    pointer-events: none; /* Não bloquear cliques no conteúdo abaixo */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, top 0.4s ease, visibility 0.4s ease;
+}
+
+/* Classe 'show' para ativar a animação de entrada */
+.custom-message.show {
+    top: 95px; /* Posição final abaixo do header */
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Cor para mensagens de sucesso */
+.custom-message.success {
+    background-color: #b8f29b; /* Verde ByteStore */
+    color: #111; /* Texto escuro para melhor contraste nessa cor */
+}
+
+/* Cor para mensagens de erro */
+.custom-message.error {
+    background-color: #ff6b6b; /* Vermelho */
+}

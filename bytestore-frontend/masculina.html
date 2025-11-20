@@ -5,44 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ByteStore - Moda Masculina</title>
 <link rel="stylesheet" href="css/style.css">
-<style>
-    .filtros {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin: 163px 0;
-    }
-    .filtros input, .filtros select {
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-    }
-    .products-container {
-        max-width: 1000px;
-        margin: auto;
-    }
-    .product-card {
-        background: #fff;
-        border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        padding: 15px;
-        margin: 20px;
-        text-align: center;
-        display: inline-block;
-        width: 250px;
-        vertical-align: top;
-    }
-    .product-card img {
-        max-width: 100%;
-        border-radius: 8px;
-    }
-    .price {
-        font-weight: bold;
-        color: #2a7a2a;
-        margin: 10px 0;
-    }
-</style>
+<link rel="stylesheet" href="css/produtos.css">
+
 </head>
 <body>
 
@@ -58,6 +22,8 @@
             <li><a href="masculina.html">Masculina</a></li>
             <li><a href="feminina.html">Feminina</a></li>
             <li><a href="carrinho.html">Carrinho</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="minha_conta.html">Minha Conta</a></li>
         </ul>
     </nav>
 </header>
@@ -95,7 +61,7 @@
 
         <!-- Produto 1 -->
         <div class="product-card" data-preco="79.90" data-nome="camiseta masculina" data-categoria="camiseta">
-            <img src="imagens/oersized masculina.webp" alt="Camiseta Oversized Masculina" id="masc1">
+            <img class="product-image" src="imagens/oersizedMasculina.jpg" alt="Camiseta Oversized Masculina" id="masc1">
             <div class="product-info">
                 <h3>Camiseta Masculina</h3>
                 <p class="price">R$ 79,90</p>
@@ -106,13 +72,13 @@
                     <option value="G">G</option>
                     <option value="GG">GG</option>
                 </select>
-                <button onclick="addToCart('Camiseta Masculina',79.90,'imagens/oersized masculina.webp',document.getElementById('tamanho-masc1').value)">Adicionar ao Carrinho</button>
+                <button class="btn-add-to-cart" onclick="addToCart('Camiseta Masculina',79.90,'imagens/oersizedMasculina.jpg',document.getElementById('tamanho-masc1').value)">Adicionar ao Carrinho</button>
             </div>
         </div>
 
         <!-- Produto 2 -->
         <div class="product-card" data-preco="129.90" data-nome="calça masculina" data-categoria="calça">
-            <img src="imagens/calçaMasculina1.webp" alt="Calça Masculina" id="masc2">
+            <img class="product-image" src="imagens/calçaMasculina1.jpg" alt="Calça Masculina" id="masc2">
             <div class="product-info">
                 <h3>Calça Masculina</h3>
                 <p class="price">R$ 129,90</p>
@@ -123,13 +89,13 @@
                     <option value="G" selected>G</option>
                     <option value="GG">GG</option>
                 </select>
-                <button onclick="addToCart('Calça Masculina',129.90,'imagens/calçaMasculina1.webp',document.getElementById('tamanho-masc2').value)">Adicionar ao Carrinho</button>
+                <button class="btn-add-to-cart" onclick="addToCart('Calça Masculina',129.90,'imagens/calçaMasculina1.jpg',document.getElementById('tamanho-masc2').value)">Adicionar ao Carrinho</button>
             </div>
         </div>
 
         <!-- Produto 3 -->
         <div class="product-card" data-preco="149.90" data-nome="jaqueta masculina" data-categoria="jaqueta">
-            <img src="imagens/jaqueta masculina.webp" alt="Jaqueta Masculina" id="masc3">
+            <img class="product-image" src="imagens/jaquetaMasculina.jpg" alt="Jaqueta Masculina" id="masc3">
             <div class="product-info">
                 <h3>Jaqueta Masculina</h3>
                 <p class="price">R$ 149,90</p>
@@ -140,13 +106,13 @@
                     <option value="G" selected>G</option>
                     <option value="GG">GG</option>
                 </select>
-                <button onclick="addToCart('Jaqueta Masculina',149.90,'imagens/jaquetaMasculina.webp',document.getElementById('tamanho-masc3').value)">Adicionar ao Carrinho</button>
+                <button class="btn-add-to-cart" onclick="addToCart('Jaqueta Masculina',149.90,'imagens/jaquetaMasculina.jpg',document.getElementById('tamanho-masc3').value)">Adicionar ao Carrinho</button>
             </div>
         </div>
 
         <!-- Produto 4 -->
         <div class="product-card" data-preco="59.90" data-nome="bermuda masculina" data-categoria="bermuda">
-            <img src="imagens/bermuda masculina.webp" alt="Bermuda Masculina" id="masc4">
+    <img class="product-image" src="imagens/bermudaMasculina.jpg" alt="Bermuda Masculina" id="masc4">
             <div class="product-info">
                 <h3>Bermuda Masculina</h3>
                 <p class="price">R$ 59,90</p>
@@ -157,13 +123,13 @@
                     <option value="G">G</option>
                     <option value="GG">GG</option>
                 </select>
-                <button onclick="addToCart('Bermuda Masculina',59.90,'imagens/bermudaMasculina.webp',document.getElementById('tamanho-masc4').value)">Adicionar ao Carrinho</button>
+                <button class="btn-add-to-cart" onclick="addToCart('Bermuda Masculina',59.90,'imagens/bermudaMasculina.jpg',document.getElementById('tamanho-masc4').value)">Adicionar ao Carrinho</button>
             </div>
         </div>
 
         <!-- Produto 5 -->
         <div class="product-card" data-preco="109.90" data-nome="camisa social masculina" data-categoria="camisa social">
-            <img src="imagens/camisa social masculina.webp" alt="Camisa Social Masculina" id="masc5">
+            <img class="product-image" src="imagens/camisaSocialMasculina.jpg" alt="Camisa Social Masculina" id="masc5">
             <div class="product-info">
                 <h3>Camisa Social Masculina</h3>
                 <p class="price">R$ 109,90</p>
@@ -174,13 +140,13 @@
                     <option value="G">G</option>
                     <option value="GG">GG</option>
                 </select>
-                <button onclick="addToCart('Camisa Social Masculina',109.90,'imagens/camisaSocialMasculina.webp',document.getElementById('tamanho-masc5').value)">Adicionar ao Carrinho</button>
+                <button class="btn-add-to-cart" onclick="addToCart('Camisa Social Masculina',109.90,'imagens/camisaSocialMasculina.jpg',document.getElementById('tamanho-masc5').value)">Adicionar ao Carrinho</button>
             </div>
         </div>
 
         <!-- Produto 6 -->
         <div class="product-card" data-preco="89.90" data-nome="moletom masculino" data-categoria="moletom">
-            <img src="imagens/moletom masculino.webp" alt="Moletom Masculino" id="masc6">
+            <img class="product-image" src="imagens/moletomMasculino.jpg" alt="Moletom Masculino" id="masc6">
             <div class="product-info">
                 <h3>Moletom Masculino</h3>
                 <p class="price">R$ 89,90</p>
@@ -191,7 +157,7 @@
                     <option value="G">G</option>
                     <option value="GG">GG</option>
                 </select>
-                <button onclick="addToCart('Moletom Masculino',89.90,'imagens/moletomMasculino.webp',document.getElementById('tamanho-masc6').value)">Adicionar ao Carrinho</button>
+                <button class="btn-add-to-cart" onclick="addToCart('Moletom Masculino',89.90,'imagens/moletomMasculino.jpg',document.getElementById('tamanho-masc6').value)">Adicionar ao Carrinho</button>
             </div>
         </div>
 
@@ -283,3 +249,4 @@
 
 </body>
 </html>
+

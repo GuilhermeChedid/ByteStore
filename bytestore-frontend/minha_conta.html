@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minha Conta - ByteStore</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+    .account-main { max-width: 500px; margin: 80px auto; padding: 40px; text-align: center; background-color: #fff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+    .account-main h1 { margin-bottom: 30px; font-size: 2rem; }
+    .tabs { display: flex; margin-bottom: 30px; }
+    .tab-btn { flex: 1; padding: 15px; background-color: #c8e6c9; color: #333; border: none; cursor: pointer; font-weight: 700; font-size: 1rem; transition: background-color 0.3s; border-top: 3px solid transparent; border-bottom: 3px solid #ddd; }
+    .tab-btn.active { background-color: #4CAF50; color: white; border-bottom: 3px solid #4CAF50; }
+    .tab-content form { display: flex; flex-direction: column; gap: 15px; }
+    .tab-content input { padding: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; width: 100%; }
+    .tab-content input:focus { border-color: #4CAF50; outline: none; box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+    /* Botões padronizados */
+    .btn { padding: 15px; border-radius: 6px; font-weight: 700; cursor: pointer; transition: background-color 0.3s, color 0.2s, border-color 0.2s; font-size: 1.05rem; display: inline-flex; align-items: center; justify-content: center; }
+    .btn-primary { background-color: #b8f29b; color: #111; border: none; }
+    .btn-primary:hover { background-color: #a3d987; }
+    .btn-secondary { background-color: transparent; color: #111; border: 1px solid #ccc; }
+    .btn-secondary:hover { background-color: #f5f5f5; }
+    .btn-block { width: 100%; }
+    .form-actions { display: flex; gap: 12px; justify-content: center; align-items: center; }
+    /* Link de ação alinhado à direita (mesmo padrão do esqueci minha senha) */
+    .inline-right-link { display: block; text-align: right; width: 100%; color: #1a73e8; text-decoration: underline; font-weight: 600; padding: 4px 0; }
+    .inline-right-link:hover { color: #1558b0; }
+    .form-error { color: #d8000c; font-size: 0.9rem; text-align: left; margin-top: -4px; }
+    .link-btn { background: transparent; border: none; color: #111; text-decoration: underline; cursor: pointer; font-weight: 600; padding: 4px; }
+    .link-btn:hover { color: #000; }
+    /* Link padrão de recuperação abaixo da senha */
+    .forgot-link { background: transparent; border: none; color: #1a73e8; text-decoration: underline; cursor: pointer; font-weight: 600; padding: 4px 0; display: block; text-align: right; width: 100%; margin-top: 4px; }
+    .forgot-link:hover { color: #1558b0; }
+    /* Toggle de visualização de senha (olho, press-and-hold) */
+    .password-group { position: relative; width: 100%; }
+    .password-group input { width: 100%; padding-right: 42px; }
+    .password-group .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: #333;
+        cursor: pointer;
+        padding: 0;
+        width: 28px;
+        height: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.8;
+        touch-action: manipulation;
+    }
+    .password-group .toggle-password:hover { color: #111; opacity: 1; }
+    .password-group .toggle-password svg { width: 20px; height: 20px; pointer-events: none; }
+    /* Espaçamento consistente quando o formulário de recuperação está visível */
+    .forgot-password-form { margin-top: 16px; display: flex; flex-direction: column; gap: 15px; }
+    .info-group { display: flex; flex-direction: column; gap: 8px; text-align: left; }
+    .info-group label { font-weight: 500; font-size: 0.9rem; }
+    .info-group input, .info-group select { padding: 12px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; width: 100%; }
+    .info-group input:focus, .info-group select:focus { border-color: #4CAF50; outline: none; box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo"><a href="home.html"><img src="imagens/logo.jpeg" alt="ByteStore Logo"></a></div>
+    <nav>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="masculina.html">Masculina</a></li>
+            <li><a href="feminina.html">Feminina</a></li>
+            <li><a href="carrinho.html">Carrinho</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="minha_conta.html">Minha Conta</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main class="account-main">
+    <h1>Minha Conta</h1>
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'login')">Login</button>
+        <button class="tab-btn" onclick="openTab(event, 'cadastro')">Cadastro</button>
+    </div>
+    <div id="login" class="tab-content" style="display:block;">
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Email" required
+                   pattern="^[^\s@]+@((gmail\.com(\.br)?)|(hotmail\.com)|(outlook\.com(\.br)?)|(yahoo\.com(\.br)?))$"
+                   title="Use um email dos domínios: @gmail.com, @gmail.com.br, @hotmail.com, @outlook.com, @outlook.com.br, @yahoo.com, @yahoo.com.br">
+            <div class="password-group">
+                <input type="password" id="loginSenha" placeholder="Senha" required>
+                <button type="button" class="toggle-password" data-target="loginSenha" aria-label="Pressione e segure para ver a senha" title="Pressione e segure para ver a senha">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+            <a href="#" id="forgotPasswordBtn" class="forgot-link">Esqueci minha senha</a>
+            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        </form>
+        <!-- Esqueci minha senha -->
+        <form id="forgotPasswordForm" class="forgot-password-form" style="display:none;">
+            <input type="email" id="forgotEmail" placeholder="Email" required
+                   pattern="^[^\s@]+@((gmail\.com(\.br)?)|(hotmail\.com)|(outlook\.com(\.br)?)|(yahoo\.com(\.br)?))$"
+                   title="Use um email dos domínios: @gmail.com, @gmail.com.br, @hotmail.com, @outlook.com, @outlook.com.br, @yahoo.com, @yahoo.com.br">
+            <div class="password-group">
+                <input type="password" id="forgotNewPassword" placeholder="Nova senha" required>
+                <button type="button" class="toggle-password" data-target="forgotNewPassword" aria-label="Pressione e segure para ver a senha" title="Pressione e segure para ver a senha">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+            <div class="password-group">
+                <input type="password" id="forgotNewPasswordConfirm" placeholder="Confirme a nova senha" required>
+                <button type="button" class="toggle-password" data-target="forgotNewPasswordConfirm" aria-label="Pressione e segure para ver a senha" title="Pressione e segure para ver a senha">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+            <small id="forgotError" class="form-error" style="display:none;"></small>
+            <button type="submit" class="btn btn-primary btn-block">Redefinir senha</button>
+            <a href="#" id="cancelForgotBtn" class="inline-right-link">Cancelar</a>
+        </form>
+    </div>
+    <div id="cadastro" class="tab-content" style="display:none;">
+        <form id="cadastroForm">
+            <input type="text" id="cadastroNome" placeholder="Nome Completo" required>
+            <input type="email" id="cadastroEmail" placeholder="Email" required
+                   pattern="^[^\s@]+@((gmail\.com(\.br)?)|(hotmail\.com)|(outlook\.com(\.br)?)|(yahoo\.com(\.br)?))$"
+                   title="Use um email dos domínios: @gmail.com, @gmail.com.br, @hotmail.com, @outlook.com, @outlook.com.br, @yahoo.com, @yahoo.com.br">
+            <div class="password-group">
+                <input type="password" id="cadastroSenha" placeholder="Senha" required>
+                <button type="button" class="toggle-password" data-target="cadastroSenha" aria-label="Pressione e segure para ver a senha" title="Pressione e segure para ver a senha">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+            <div class="password-group">
+                <input type="password" id="cadastroSenhaConfirm" placeholder="Confirme sua senha" required>
+                <button type="button" class="toggle-password" data-target="cadastroSenhaConfirm" aria-label="Pressione e segure para ver a senha" title="Pressione e segure para ver a senha">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                </button>
+            </div>
+            <small id="cadastroSenhaConfirmError" class="form-error" style="display:none;"></small>
+            <hr>
+            <div class="info-group">
+                <label for="cadastro-cep">CEP</label>
+                <input type="text" id="cadastro-cep" name="cep" required pattern="\d{5}-?\d{3}" maxlength="9" placeholder="00000-000">
+            </div>
+            <div class="info-group">
+                <label for="cadastro-estado">Estado</label>
+                <select id="cadastro-estado" name="estado" required>
+                    <option value="">Selecione o Estado</option>
+                    <option value="AC">Acre (AC)</option>
+                    <option value="AL">Alagoas (AL)</option>
+                    <option value="AP">Amapá (AP)</option>
+                    <option value="AM">Amazonas (AM)</option>
+                    <option value="BA">Bahia (BA)</option>
+                    <option value="CE">Ceará (CE)</option>
+                    <option value="DF">Distrito Federal (DF)</option>
+                    <option value="ES">Espírito Santo (ES)</option>
+                    <option value="GO">Goiás (GO)</option>
+                    <option value="MA">Maranhão (MA)</option>
+                    <option value="MT">Mato Grosso (MT)</option>
+                    <option value="MS">Mato Grosso do Sul (MS)</option>
+                    <option value="MG">Minas Gerais (MG)</option>
+                    <option value="PA">Pará (PA)</option>
+                    <option value="PB">Paraíba (PB)</option>
+                    <option value="PR">Paraná (PR)</option>
+                    <option value="PE">Pernambuco (PE)</option>
+                    <option value="PI">Piauí (PI)</option>
+                    <option value="RJ">Rio de Janeiro (RJ)</option>
+                    <option value="RN">Rio Grande do Norte (RN)</option>
+                    <option value="RS">Rio Grande do Sul (RS)</option>
+                    <option value="RO">Rondônia (RO)</option>
+                    <option value="RR">Roraima (RR)</option>
+                    <option value="SC">Santa Catarina (SC)</option>
+                    <option value="SP">São Paulo (SP)</option>
+                    <option value="SE">Sergipe (SE)</option>
+                    <option value="TO">Tocantins (TO)</option>
+                </select>
+            </div>
+            <div class="info-group">
+                <label for="cadastro-cidade">Cidade</label>
+                <input type="text" id="cadastro-cidade" name="cidade" required pattern="[A-Za-z\u00C0-\u017F\s]{3,}" maxlength="40" placeholder="Digite a cidade">
+            </div>
+            <div class="info-group">
+                <label for="cadastro-bairro">Bairro</label>
+                <input type="text" id="cadastro-bairro" name="bairro" required pattern="[A-Za-z\u00C0-\u017F\s()]{3,}" maxlength="60" placeholder="Digite o bairro">
+            </div>
+            <div class="info-group">
+                <label for="cadastro-quadra">Quadra/Rua e Número</label>
+                <input type="text" id="cadastro-quadra" name="quadra" required maxlength="60">
+            </div>
+            <div class="info-group">
+                <label for="cadastro-complemento">Complemento</label>
+                <input type="text" id="cadastro-complemento" name="complemento" maxlength="50" pattern="[A-Za-z\u00C0-\u017F0-9\s()\-.,]{0,50}">
+            </div>
+            <label style="margin-top:16px; display:block;">
+              <input type="checkbox" id="consentimento-cadastro" required>
+              Li e concordo com a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a>.
+            </label>
+            <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+        </form>
+    </div>
+</main>
+
+<script src="../js/script.js"></script>
+<script>
+// Fallback: se o util de toast global não estiver disponível por algum motivo,
+// define uma versão local com o mesmo padrão visual.
+if (typeof window.showToast !== 'function') {
+    window.showToast = function(message, type = 'success', duration = 3000) {
+        try {
+            const existing = document.querySelector('.custom-message.show');
+            if (existing) existing.remove();
+            const toast = document.createElement('div');
+            toast.className = `custom-message ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            void toast.offsetWidth;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        } catch (e) { alert(message); }
+    };
+}
+// Se já logado, redireciona para o perfil
+if (localStorage.getItem('usuarioLogado')) { window.location.href = 'perfil.html'; }
+// Caso tenha ocorrido um logout recente e o usuário abriu/está nesta página
+try {
+    const ts = parseInt(localStorage.getItem('logoutAt') || '0', 10);
+    if (ts && Date.now() - ts < 5000 && typeof showToast === 'function') {
+        showToast('Você foi desconectado.', 'success', 2000);
+        localStorage.removeItem('logoutAt');
+    }
+} catch {}
+function openTab(evt, tabName) {
+    document.querySelectorAll(".tab-content").forEach(tab => tab.style.display = "none");
+    document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.classList.add("active");
+}
+document.addEventListener("DOMContentLoaded", () => {
+    const allowedMessage = 'Email inválido. Permitidos: @gmail.com, @gmail.com.br, @hotmail.com, @outlook.com, @outlook.com.br, @yahoo.com, @yahoo.com.br';
+    const allowedRegex = /^[^\s@]+@((gmail\.com(\.br)?)|(hotmail\.com)|(outlook\.com(\.br)?)|(yahoo\.com(\.br)?))$/i;
+    const isAllowedEmail = (email) => allowedRegex.test(String(email).trim());
+
+    // Toggle de visualização de senha (pressionar e segurar)
+    document.querySelectorAll('.toggle-password').forEach(btn => {
+        const targetId = btn.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        if (!input) return;
+
+        const show = () => { input.type = 'text'; };
+        const hide = () => { input.type = 'password'; };
+
+        // Mouse
+        btn.addEventListener('mousedown', (e) => { e.preventDefault(); show(); });
+        btn.addEventListener('mouseup', hide);
+        btn.addEventListener('mouseleave', hide);
+
+        // Touch
+        btn.addEventListener('touchstart', (e) => { e.preventDefault(); show(); }, { passive: false });
+        btn.addEventListener('touchend', hide);
+        btn.addEventListener('touchcancel', hide);
+
+        // Teclado (acessibilidade)
+        btn.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); show(); } });
+        btn.addEventListener('keyup', hide);
+    });
+
+    const cadastroForm = document.getElementById("cadastroForm");
+    if (cadastroForm) {
+        cadastroForm.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const emailVal = document.getElementById("cadastroEmail").value;
+            if (!isAllowedEmail(emailVal)) { alert(allowedMessage); return; }
+            const senha = document.getElementById("cadastroSenha").value;
+            const senha2 = document.getElementById("cadastroSenhaConfirm").value;
+            const senhaErrEl = document.getElementById("cadastroSenhaConfirmError");
+            if (senhaErrEl) { senhaErrEl.textContent = ''; senhaErrEl.style.display = 'none'; }
+            if (senha !== senha2) {
+                if (senhaErrEl) { senhaErrEl.textContent = 'As senhas não coincidem.'; senhaErrEl.style.display = 'block'; }
+                return;
+            }
+            const userData = {
+                nome: document.getElementById("cadastroNome").value, email: document.getElementById("cadastroEmail").value, senha: senha,
+                cep: document.getElementById("cadastro-cep").value, estado: document.getElementById("cadastro-estado").value, bairro: document.getElementById("cadastro-bairro").value,
+                quadra: document.getElementById("cadastro-quadra").value, complemento: document.getElementById("cadastro-complemento").value
+            };
+            try {
+                const response = await fetch('http://localhost:3000/cadastro', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(userData) });
+                const result = await response.json();
+                if (response.ok) {
+                    if (typeof showToast === 'function') {
+                        showToast('Cadastro realizado com sucesso!', 'success', 2500);
+                    }
+                    cadastroForm.reset();
+                    document.querySelector('.tab-btn').click();
+                } else {
+                    if (typeof showToast === 'function') {
+                        showToast(result.error || 'Erro ao cadastrar.', 'error', 3000);
+                    } else {
+                        alert(`Erro: ${result.error}`);
+                    }
+                }
+            } catch (error) { alert('Falha na comunicação com o servidor.'); }
+        });
+    }
+    const loginForm = document.getElementById("loginForm");
+    if (loginForm) {
+        loginForm.addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const emailVal = document.getElementById("loginEmail").value;
+            if (!isAllowedEmail(emailVal)) { alert(allowedMessage); return; }
+            try {
+                const response = await fetch('http://localhost:3000/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: document.getElementById("loginEmail").value, senha: document.getElementById("loginSenha").value }) });
+                const result = await response.json();
+                if (response.ok) {
+                    localStorage.setItem('usuarioLogado', JSON.stringify(result.user));
+                    if (typeof showToast === 'function') {
+                        showToast('Login realizado com sucesso!', 'success', 1500);
+                        setTimeout(() => window.location.href = 'perfil.html', 800);
+                    } else {
+                        window.location.href = 'perfil.html';
+                    }
+                } else {
+                    if (typeof showToast === 'function') {
+                        showToast(result.error || 'Email ou senha inválidos.', 'error', 3000);
+                    } else {
+                        alert(`Erro: ${result.error}`);
+                    }
+                }
+            } catch (error) { alert('Falha na comunicação com o servidor.'); }
+        });
+
+        // Esqueci minha senha: toggles
+        const forgotBtn = document.getElementById('forgotPasswordBtn');
+        const forgotForm = document.getElementById('forgotPasswordForm');
+        const forgotErr = document.getElementById('forgotError');
+    const cancelForgotBtn = document.getElementById('cancelForgotBtn');
+        if (forgotBtn && forgotForm) {
+            forgotBtn.addEventListener('click', () => {
+                // Usa o mesmo layout (flex + gap) dos outros formulários
+                forgotForm.style.display = 'flex';
+                forgotBtn.style.display = 'none';
+            });
+        }
+        if (cancelForgotBtn && forgotForm) {
+            cancelForgotBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                forgotForm.reset();
+                if (forgotErr) { forgotErr.textContent = ''; forgotErr.style.display = 'none'; }
+                forgotForm.style.display = 'none';
+                if (forgotBtn) forgotBtn.style.display = 'block';
+            });
+        }
+        if (forgotForm) {
+            forgotForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('forgotEmail').value;
+                const nova = document.getElementById('forgotNewPassword').value;
+                const nova2 = document.getElementById('forgotNewPasswordConfirm').value;
+                if (forgotErr) { forgotErr.textContent = ''; forgotErr.style.display = 'none'; }
+                if (!isAllowedEmail(email)) { if (forgotErr) { forgotErr.textContent = allowedMessage; forgotErr.style.display = 'block'; } return; }
+                if (nova !== nova2) { if (forgotErr) { forgotErr.textContent = 'As senhas não coincidem.'; forgotErr.style.display = 'block'; } return; }
+                try {
+                    const response = await fetch('http://localhost:3000/redefinir-senha', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, novaSenha: nova }) });
+                    const result = await response.json();
+                    if (response.ok) {
+                        if (typeof showToast === 'function') showToast('Senha redefinida com sucesso!', 'success', 2500);
+                        // Garante visibilidade da mensagem
+                        try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch {}
+                        forgotForm.reset();
+                        forgotForm.style.display = 'none';
+                        if (forgotBtn) forgotBtn.style.display = 'block';
+                        // Opcional: voltar o foco para a aba de Login
+                        try { const loginTabBtn = document.querySelector('.tab-btn'); if (loginTabBtn) loginTabBtn.focus(); } catch {}
+                    } else {
+                        if (typeof showToast === 'function') showToast(result.error || 'Não foi possível redefinir a senha.', 'error', 3000);
+                    }
+                } catch (err) {
+                    if (typeof showToast === 'function') showToast('Falha na comunicação com o servidor.', 'error', 3000);
+                }
+            });
+        }
+    }
+
+    document.getElementById('cadastro-cep').addEventListener('blur', function() {
+        const cep = this.value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('cadastro-estado').value = data.uf || '';
+                        document.getElementById('cadastro-cidade').value = data.localidade || '';
+                        document.getElementById('cadastro-bairro').value = data.bairro || '';
+                        if (data.logradouro) {
+                            document.getElementById('cadastro-quadra').value = data.logradouro;
+                        }
+                    } else {
+                        alert('CEP não encontrado.');
+                    }
+                })
+                .catch(() => {
+                    alert('Erro ao buscar CEP.');
+                });
+        }
+    });
+});
+</script>
+
+</body>
+</html>

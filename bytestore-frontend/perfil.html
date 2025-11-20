@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Perfil - ByteStore</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+    body { background-color: #f4f4f4; }
+    .account-container { display: flex; max-width: 1100px; margin: 50px auto; gap: 30px; align-items: flex-start; }
+    .account-nav { flex: 0 0 250px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 20px; }
+    .account-nav ul { list-style: none; padding: 0; margin: 0; }
+    .account-nav ul li a { display: block; padding: 15px; text-decoration: none; color: #333; font-weight: 600; border-radius: 6px; transition: background-color 0.2s, color 0.2s; cursor: pointer; }
+    .account-nav ul li a:hover { background-color: #f0f0f0; }
+    .account-nav ul li a.active { background-color: #111; color: #fff; }
+    .account-nav ul li a#logout-link { color: #c54242; font-weight: bold; }
+    .account-content { flex-grow: 1; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 40px; }
+    .content-section { display: none; }
+    .content-section.active { display: block; }
+    .account-content h1 { font-size: 2rem; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 30px; color: #111; }
+    .info-group { margin-bottom: 25px; }
+    .info-group label { display: block; font-size: 0.9rem; color: #777; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; }
+    .info-group p { font-size: 1.2rem; color: #111; margin: 0; }
+    /* Estilos para o formulário de endereço */
+    #endereco-form { display: grid; gap: 15px; }
+    #endereco-form .info-group { margin-bottom: 0; }
+    #endereco-form label { margin-bottom: 5px; }
+    #endereco-form input, #endereco-form select { padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; }
+    #salvar-endereco { padding: 10px 15px; font-size: 1rem; color: #fff; background-color: #007bff; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.2s; }
+    #salvar-endereco:hover { background-color: #0056b3; }
+    /* Estilos para os pedidos */
+    .pedido-box { border: 1px solid #eee; border-radius: 8px; margin-bottom: 18px; padding: 16px; background: #fafafa; }
+    .pedido-box strong { font-size: 1.1rem; }
+    .pedido-box ul { margin: 10px 0 0 18px; list-style: none; padding: 0; }
+    .pedido-box li { display: flex; align-items: center; margin-bottom: 8px; }
+    .pedido-box img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; margin-right: 10px; box-shadow: 0 1px 4px #0001; }
+    .btn-cancelar-pedido { margin-top: 10px; background: #fff; color: #c54242; border: 1px solid #c54242; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+    /* Estilos para o modal de confirmação */
+    #modal-cancelar-pedido { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0007; z-index: 9999; align-items: center; justify-content: center; }
+    #modal-cancelar-pedido > div { background: #fff; padding: 32px 24px; border-radius: 10px; max-width: 90vw; width: 350px; text-align: center; box-shadow: 0 4px 24px #0002; }
+    #modal-cancelar-pedido h3 { color: #c54242; margin-bottom: 18px; }
+    #modal-cancelar-pedido p { margin-bottom: 22px; }
+    #modal-cancelar-pedido button { padding: 10px 22px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+    #btn-modal-cancelar-sim { background: #c54242; color: #fff; }
+    #btn-modal-cancelar-nao { background: #eee; color: #222; }
+</style>
+</head>
+<body>
+<header>
+    <div class="logo"><a href="home.html"><img src="imagens/logo.jpeg" alt="ByteStore Logo"></a></div>
+    <nav>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="masculina.html">Masculina</a></li>
+            <li><a href="feminina.html">Feminina</a></li>
+            <li><a href="carrinho.html">Carrinho</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="minha_conta.html">Minha Conta</a></li>
+
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="account-container">
+        <aside class="account-nav">
+            <ul>
+                <li><a id="nav-conta" class="active">Minha Conta</a></li>
+                <li><a id="nav-endereco">Endereço</a></li>
+                <li><a id="nav-pedidos">Meus Pedidos</a></li>
+                <li><a id="logout-link">Sair</a></li>
+            </ul>
+        </aside>
+        <section class="account-content">
+            <div id="section-conta" class="content-section active">
+                <h1 id="welcome-title">Carregando...</h1>
+                <div class="info-group"><label>Nome Completo</label><p id="user-name">...</p></div>
+                <div class="info-group"><label>Email de Cadastro</label><p id="user-email">...</p></div>
+                <!-- Seção de Alterar Senha removida a pedido do usuário -->
+            </div>
+            <div id="section-endereco" class="content-section">
+                <h1>Meu Endereço</h1>
+                <form id="endereco-form">
+                    <div class="info-group">
+                        <label for="input-cep">CEP</label>
+                        <input type="text" id="input-cep" name="cep" required pattern="\d{5}-?\d{3}" maxlength="9" placeholder="00000-000">
+                    </div>
+                    <div class="info-group">
+                        <label for="input-estado">Estado</label>
+                        <select id="input-estado" name="estado" required>
+                            <option value="">Selecione o Estado</option>
+                            <option value="AC">Acre (AC)</option>
+                            <option value="AL">Alagoas (AL)</option>
+                            <option value="AP">Amapá (AP)</option>
+                            <option value="AM">Amazonas (AM)</option>
+                            <option value="BA">Bahia (BA)</option>
+                            <option value="CE">Ceará (CE)</option>
+                            <option value="DF">Distrito Federal (DF)</option>
+                            <option value="ES">Espírito Santo (ES)</option>
+                            <option value="GO">Goiás (GO)</option>
+                            <option value="MA">Maranhão (MA)</option>
+                            <option value="MT">Mato Grosso (MT)</option>
+                            <option value="MS">Mato Grosso do Sul (MS)</option>
+                            <option value="MG">Minas Gerais (MG)</option>
+                            <option value="PA">Pará (PA)</option>
+                            <option value="PB">Paraíba (PB)</option>
+                            <option value="PR">Paraná (PR)</option>
+                            <option value="PE">Pernambuco (PE)</option>
+                            <option value="PI">Piauí (PI)</option>
+                            <option value="RJ">Rio de Janeiro (RJ)</option>
+                            <option value="RN">Rio Grande do Norte (RN)</option>
+                            <option value="RS">Rio Grande do Sul (RS)</option>
+                            <option value="RO">Rondônia (RO)</option>
+                            <option value="RR">Roraima (RR)</option>
+                            <option value="SC">Santa Catarina (SC)</option>
+                            <option value="SP">São Paulo (SP)</option>
+                            <option value="SE">Sergipe (SE)</option>
+                            <option value="TO">Tocantins (TO)</option>
+                        </select>
+                    </div>
+                    <div class="info-group">
+                        <label for="input-cidade">Cidade</label>
+                        <input type="text" id="input-cidade" name="cidade" required pattern="[A-Za-zÀ-ú\s]{3,}" maxlength="40" placeholder="Digite a cidade">
+                    </div>
+                    <div class="info-group">
+                        <label for="input-bairro">Bairro</label>
+                        <input type="text" id="input-bairro" name="bairro" required pattern="[A-Za-zÀ-ú\s()]{3,}" maxlength="60" placeholder="Digite o bairro">
+                    </div>
+                    <div class="info-group">
+                        <label for="input-quadra">Quadra/Rua e Número</label>
+                        <input type="text" id="input-quadra" name="quadra" required maxlength="60">
+                    </div>
+                    <div class="info-group">
+                        <label for="input-complemento">Complemento</label>
+                        <input type="text" id="input-complemento" name="complemento" maxlength="50" pattern="[A-Za-zÀ-ú0-9\s()\-.,]{0,50}">
+                    </div>
+                    <button type="submit" id="salvar-endereco" style="margin-top:20px;">Salvar Endereço</button>
+                </form>
+            </div>
+            <div id="section-pedidos" class="content-section">
+                <h1>Meus Pedidos</h1>
+                <p>Nenhum pedido encontrado.</p>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="../js/script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Renderiza pedidos na seção "Meus Pedidos"
+    function renderPedidos() {
+        const pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+        const pedidosSection = document.getElementById('section-pedidos');
+        if (!pedidosSection) return;
+        if (!pedidos.length) {
+            pedidosSection.innerHTML = '<h1>Meus Pedidos</h1><p>Nenhum pedido encontrado.</p>';
+            return;
+        }
+        let html = '<h1>Meus Pedidos</h1>';
+        pedidos.slice().reverse().forEach((pedido, idx) => {
+            const pedidoIndex = pedidos.length - 1 - idx;
+            html += `<div class="pedido-box" style="border:1px solid #eee; border-radius:8px; margin-bottom:18px; padding:16px; background:#fafafa;">
+                <strong>Pedido #${pedidos.length-idx}</strong> <span style=\"color:#888; font-size:0.95em;\">(${pedido.data})</span><ul style=\"margin:10px 0 0 18px; list-style:none; padding:0;\">`;
+            pedido.itens.forEach(item => {
+                html += `<li style=\"display:flex;align-items:center;margin-bottom:8px;\">`
+                    + `<img src='${item.imagem || "bytestore-frontend/imagens/produto-default.png"}' alt='${item.nome}' style=\"width:48px;height:48px;object-fit:cover;border-radius:6px;margin-right:10px;box-shadow:0 1px 4px #0001;\">`
+                    + `<span>${item.qty || 1}x ${item.nome} (${item.tamanho || ''}) - R$ ${item.preco.toFixed(2)}</span>`
+                + `</li>`;
+            });
+            html += `</ul><button class='btn-cancelar-pedido' data-pedido-index='${pedidoIndex}' style='margin-top:10px;background:#fff;color:#c54242;border:1px solid #c54242;padding:8px 18px;border-radius:6px;cursor:pointer;font-weight:600;'>Cancelar pedido</button></div>`;
+        });
+        pedidosSection.innerHTML = html;
+
+        // Modal de confirmação de cancelamento
+        if (!document.getElementById('modal-cancelar-pedido')) {
+            const modal = document.createElement('div');
+            modal.id = 'modal-cancelar-pedido';
+            modal.style = 'display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:9999;align-items:center;justify-content:center;';
+            modal.innerHTML = `<div style='background:#fff;padding:32px 24px;border-radius:10px;max-width:90vw;width:350px;text-align:center;box-shadow:0 4px 24px #0002;'>
+                <h3 style='color:#c54242;margin-bottom:18px;'>Cancelar pedido</h3>
+                <p style='margin-bottom:22px;'>Você tem até 2 horas para cancelar o pedido.<br>Tem certeza que deseja continuar?</p>
+                <div style='display:flex;gap:18px;justify-content:center;'>
+                    <button id='btn-modal-cancelar-sim' style='background:#c54242;color:#fff;padding:10px 22px;border:none;border-radius:6px;font-weight:600;cursor:pointer;'>Sim</button>
+                    <button id='btn-modal-cancelar-nao' style='background:#eee;color:#222;padding:10px 22px;border:none;border-radius:6px;font-weight:600;cursor:pointer;'>Não</button>
+                </div>
+            </div>`;
+            document.body.appendChild(modal);
+        }
+        // Lógica do botão cancelar pedido
+        let pedidoParaCancelar = null;
+        document.querySelectorAll('.btn-cancelar-pedido').forEach(btn => {
+            btn.onclick = function() {
+                pedidoParaCancelar = parseInt(this.getAttribute('data-pedido-index'));
+                document.getElementById('modal-cancelar-pedido').style.display = 'flex';
+            };
+        });
+        document.getElementById('btn-modal-cancelar-sim').onclick = function() {
+            if (pedidoParaCancelar !== null) {
+                let pedidos = JSON.parse(localStorage.getItem('pedidos') || '[]');
+                pedidos.splice(pedidoParaCancelar, 1);
+                localStorage.setItem('pedidos', JSON.stringify(pedidos));
+                document.getElementById('modal-cancelar-pedido').style.display = 'none';
+                renderPedidos();
+                if (typeof showToast === 'function') {
+                    showToast('Pedido cancelado e saldo estornado!', 'success', 3000);
+                } else {
+                    alert('Pedido cancelado e saldo estornado!');
+                }
+                pedidoParaCancelar = null;
+            }
+        };
+        document.getElementById('btn-modal-cancelar-nao').onclick = function() {
+            document.getElementById('modal-cancelar-pedido').style.display = 'none';
+            pedidoParaCancelar = null;
+        };
+    }
+    renderPedidos();
+    // Atualiza pedidos ao navegar para a aba
+    const navPedidos = document.getElementById('nav-pedidos');
+    if (navPedidos) {
+        navPedidos.addEventListener('click', renderPedidos);
+    }
+    const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+    if (!usuarioLogado) { window.location.href = 'minha_conta.html'; return; }
+    document.getElementById('welcome-title').textContent = `Olá, ${usuarioLogado.nome.split(' ')[0]}`;
+    document.getElementById('user-name').textContent = usuarioLogado.nome || 'Não informado';
+    document.getElementById('user-email').textContent = usuarioLogado.email || 'Não informado';
+
+    // Preenche os campos do endereço
+    document.getElementById('input-cep').value = usuarioLogado.cep || '';
+    document.getElementById('input-estado').value = usuarioLogado.estado || '';
+    document.getElementById('input-cidade').value = usuarioLogado.cidade || '';
+    document.getElementById('input-bairro').value = usuarioLogado.bairro || '';
+    document.getElementById('input-quadra').value = usuarioLogado.quadra || '';
+    document.getElementById('input-complemento').value = usuarioLogado.complemento || '';
+
+    document.getElementById('endereco-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const cep = document.getElementById('input-cep').value;
+        const estado = document.getElementById('input-estado').value;
+        const cidade = document.getElementById('input-cidade').value;
+        const bairro = document.getElementById('input-bairro').value;
+        const quadra = document.getElementById('input-quadra').value;
+        const complemento = document.getElementById('input-complemento').value;
+        const cepRegex = /^\d{5}-?\d{3}$/;
+        if (!cepRegex.test(cep)) {
+            showToast('CEP inválido. Use o formato 00000-000.', 'error', 3000);
+            return;
+        }
+        if (/^\d+$/.test(bairro) || bairro.length < 3 || /[^A-Za-zÀ-ú\s()]/.test(bairro.replace(/[0-9]/g, ''))) {
+            showToast('Bairro inválido. Digite um nome válido.', 'error', 3000);
+            return;
+        }
+        if (/^\d+$/.test(cidade) || cidade.length < 3) {
+            showToast('Cidade inválida. Digite um nome válido.', 'error', 3000);
+            return;
+        }
+        if (!estado) {
+            showToast('Selecione o estado.', 'error', 3000);
+            return;
+        }
+        usuarioLogado.cep = cep;
+        usuarioLogado.estado = estado;
+        usuarioLogado.cidade = cidade;
+        usuarioLogado.bairro = bairro;
+        usuarioLogado.quadra = quadra;
+        usuarioLogado.complemento = complemento;
+        localStorage.setItem('usuarioLogado', JSON.stringify(usuarioLogado));
+        fetch('http://localhost:3000/atualizar-endereco', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: usuarioLogado.email,
+                cep: usuarioLogado.cep,
+                estado: usuarioLogado.estado,
+                cidade: usuarioLogado.cidade,
+                bairro: usuarioLogado.bairro,
+                quadra: usuarioLogado.quadra,
+                complemento: usuarioLogado.complemento
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.message) {
+                showToast('Endereço salvo no servidor!', 'success', 2500);
+            } else {
+                throw new Error(data.error || 'Erro ao salvar no servidor');
+            }
+        })
+        .catch(err => {
+            showToast('Falha ao salvar no servidor: ' + err.message, 'error', 3000);
+        });
+    });
+
+    document.getElementById('input-cep').addEventListener('blur', function() {
+        const cep = this.value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.erro) {
+                        document.getElementById('input-estado').value = data.uf || '';
+                        document.getElementById('input-cidade').value = data.localidade || '';
+                        document.getElementById('input-bairro').value = data.bairro || '';
+                        if (data.logradouro) {
+                            document.getElementById('input-quadra').value = data.logradouro;
+                        }
+                    } else {
+                        showToast('CEP não encontrado.', 'error', 3000);
+                    }
+                })
+                .catch(() => {
+                    showToast('Erro ao buscar CEP.', 'error', 3000);
+                });
+        }
+    });
+
+    const navLinks = document.querySelectorAll('.account-nav a');
+    const contentSections = document.querySelectorAll('.content-section');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            if (this.id === 'logout-link') return;
+            event.preventDefault();
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            this.classList.add('active');
+            const targetSection = `section-${this.id.split('-')[1]}`;
+            contentSections.forEach(section => {
+                section.style.display = section.id === targetSection ? 'block' : 'none';
+            });
+        });
+    });
+    document.getElementById('logout-link').addEventListener('click', function() {
+        localStorage.removeItem('usuarioLogado');
+        try { localStorage.setItem('logoutAt', String(Date.now())); } catch {}
+        if (typeof setNextToast === 'function') {
+            setNextToast('Você foi desconectado.', 'success', 2000);
+        }
+        window.location.href = 'minha_conta.html';
+    });
+
+    // Seção de Alterar Senha removida a pedido do usuário
+
+    // FOTO DE PERFIL - Ícone, upload e remover com modal
+    const welcomeTitle = document.getElementById('welcome-title');
+    if (welcomeTitle) {
+        // Cria container
+        const profileBox = document.createElement('span');
+        profileBox.style.display = 'inline-flex';
+        profileBox.style.alignItems = 'center';
+        profileBox.style.gap = '18px';
+        // Foto de perfil
+        let fotoPerfil = localStorage.getItem('fotoPerfil') || '';
+        const img = document.createElement('img');
+        img.src = fotoPerfil || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+        img.alt = 'Foto de perfil';
+        img.style = 'width:100px;height:100px;object-fit:cover;border-radius:50%;border:3px solid #4CAF50;box-shadow:0 1px 4px #0001;cursor:pointer;';
+        img.title = 'Clique para ver e alterar a foto';
+        // Modal de visualização/edição
+        let modal = document.getElementById('modal-foto-perfil');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'modal-foto-perfil';
+            modal.style = 'display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0007;z-index:9999;align-items:center;justify-content:center;';
+            modal.innerHTML = `<div style='background:#fff;padding:32px 24px;border-radius:12px;max-width:95vw;width:520px;text-align:center;box-shadow:0 4px 24px #0002;display:flex;flex-direction:column;align-items:center;'>
+                <img id='modal-foto-img' src='' alt='Foto de perfil' style='width:500px;height:500px;object-fit:cover;border-radius:18px;border:3px solid #4CAF50;margin-bottom:18px;background:#f4f4f4;'>
+                <div style='display:flex;gap:16px;justify-content:center;margin-bottom:18px;'>
+                    <label for='modal-foto-input' style='background:#4CAF50;color:#fff;padding:10px 22px;border-radius:6px;cursor:pointer;font-weight:600;'>Alterar imagem<input id='modal-foto-input' type='file' accept='image/*' style='display:none;'></label>
+                    <button id='modal-foto-remover' style='background:#fff;color:#c54242;border:1.5px solid #c54242;padding:10px 22px;border-radius:6px;cursor:pointer;font-weight:600;'>Remover foto</button>
+                </div>
+                <button id='modal-foto-fechar' style='background:#eee;color:#222;padding:10px 22px;border:none;border-radius:6px;font-weight:600;cursor:pointer;'>Fechar</button>
+            </div>`;
+            document.body.appendChild(modal);
+        }
+        // Abrir modal ao clicar na foto
+        img.onclick = function() {
+            document.getElementById('modal-foto-img').src = localStorage.getItem('fotoPerfil') || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            modal.style.display = 'flex';
+        };
+        // Fechar modal
+        document.getElementById('modal-foto-fechar').onclick = function() {
+            modal.style.display = 'none';
+        };
+        // Alterar imagem
+        document.getElementById('modal-foto-input').onchange = function(e) {
+            const file = this.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    document.getElementById('modal-foto-img').src = ev.target.result;
+                    img.src = ev.target.result;
+                    localStorage.setItem('fotoPerfil', ev.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+        // Remover foto
+        document.getElementById('modal-foto-remover').onclick = function() {
+            document.getElementById('modal-foto-img').src = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            img.src = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            localStorage.removeItem('fotoPerfil');
+        };
+        // Nome
+        const nomeSpan = document.createElement('span');
+        nomeSpan.textContent = welcomeTitle.textContent;
+        nomeSpan.style.fontSize = '1.5rem';
+        // Limpa e adiciona
+        welcomeTitle.textContent = '';
+        profileBox.appendChild(img);
+        profileBox.appendChild(nomeSpan);
+        welcomeTitle.appendChild(profileBox);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "bytestore",
+  "version": "1.0.0",
+  "description": "(PROJETO)",
+  "main": "database.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "http-server": "^14.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GuilhermeChedid/ByteStore.git"
+  },
+  "bugs": {
+    "url": "https://github.com/GuilhermeChedid/ByteStore/issues"
+  },
+  "homepage": "https://github.com/GuilhermeChedid/ByteStore#readme",
+  "type": "commonjs"
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ByteStore - Carrinho</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/carrinho.css">
+
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <a href="home.html"><img src="imagens/logo.jpeg" alt="ByteStore Logo"></a>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="masculina.html">Masculina</a></li>
+            <li><a href="feminina.html">Feminina</a></li>
+            <li><a href="carrinho.html">Carrinho</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="minha_conta.html">Minha Conta</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section id="carrinho">
+        <h2 style="display: flex; align-items: center;">
+            Carrinho
+            <img src="imagens/carrinhoPreto.png" alt="Ícone Carrinho" style="width: 60px; margin-left: 1px;">
+        </h2>
+        <!-- Mensagem de alerta do carrinho -->
+        <div id="cart-message" class="cart-message"></div>
+        <ul id="cartItems"></ul>
+        <p>Total: R$ <span id="totalPrice">0.00</span></p>
+    <button id="finalizarCompraBtn" onclick="showPaymentOptions()">Finalizar Compra</button>
+    </section>
+
+    <section id="pagamento" style="display:none; margin-top:30px;">
+
+        <h2>Pagamento</h2>
+        <div class="payment-methods">
+            <button onclick="showForm('cartao')">Cartão</button>
+            <button onclick="showForm('pix')">PIX</button>
+        </div>
+
+        <!-- Formulário Cartão -->
+<form id="cartaoForm">
+    <button type="button" class="close-btn" onclick="closeForms()">X Fechar</button>
+    <label for="nome">Nome do titular:</label>
+    <input type="text" id="nome" name="nome" required pattern="[A-Za-zÀ-ú\s]{3,}" maxlength="40" minlength="3" placeholder="Nome completo">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <label for="cartao" style="margin-bottom:0;">Número do Cartão:</label>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" style="height:22px;">
+      <img src="imagens/mastercard.jpg" alt="Mastercard" style="height:22px;">
+    </div>
+    <input type="text" id="cartao" name="cartao" required pattern="\d{4} \d{4} \d{4} \d{4}" maxlength="19" placeholder="0000 0000 0000 0000">
+    <label for="validade">Validade MM/AA:</label>
+    <input type="text" id="validade" name="validade" required pattern="(0[1-9]|1[0-2])\/\d{2}" maxlength="5" placeholder="MM/AA">
+    <label for="cvv">CVV:</label>
+    <input type="text" id="cvv" name="cvv" required pattern="\d{3}" maxlength="3" placeholder="000">
+    <label style="margin-top:16px; display:block;">
+      <input type="checkbox" id="consentimento-cartao" required>
+      Li e concordo com a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a>.
+    </label>
+    <button type="submit">Pagar</button>
+</form>
+
+<!-- Formulário PIX -->
+<form id="pixForm">
+    <button type="button" class="close-btn" onclick="closeForms()">X Fechar</button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <label for="nomePix" style="margin-bottom:0;">Nome do Pagador:</label>
+      <img src="../imagens/pix.png" alt="Pix" style="height:22px;">
+    </div>
+    <input type="text" id="nomePix" name="nomePix" required pattern="[A-Za-zÀ-ú\s]{3,}" maxlength="40" minlength="3" placeholder="Nome completo">
+    <div style="display:flex;align-items:center;gap:4px;">
+      <label for="cpfPix" style="margin-bottom:0;">CPF:</label>
+      <span style="cursor:help;" title="O CPF é necessário para emissão de nota fiscal e segurança da transação. Não armazenamos este dado.">?</span>
+    </div>
+    <input type="text" id="cpfPix" name="cpfPix" required pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" maxlength="14" placeholder="000.000.000-00">
+    <label for="chavePix">Chave PIX:</label>
+    <input type="text" id="chavePix" name="chavePix" required>
+    <label style="margin-top:16px; display:block;">
+      <input type="checkbox" id="consentimento-pix" required>
+      Li e concordo com a <a href="politica-privacidade.html" target="_blank">Política de Privacidade</a>.
+    </label>
+    <button type="submit">Pagar com PIX</button>
+</form>
+
+    </section>
+
+    <!-- Popup de finalização de compra -->
+    <div id="finalizacaoPopup" class="finalizacao-popup">
+        <div class="popup-content">
+            <button class="close-popup" onclick="fecharPopupFinalizacao()">&times;</button>
+            <h2>Compra Finalizada!</h2>
+            <p>Obrigado por comprar na ByteStore.<br>Seu pedido foi recebido com sucesso.</p>
+            <button onclick="fecharPopupFinalizacao()">Fechar</button>
+        </div>
+    </div>
+</main>
+
+<script src="../js/script.js"></script>
+<script>
+function mostrarPopupFinalizacao() {
+    document.getElementById('finalizacaoPopup').classList.add('show');
+}
+function fecharPopupFinalizacao() {
+    document.getElementById('finalizacaoPopup').classList.remove('show');
+}
+
+// Validação extra dos formulários de pagamento
+// ...máscaras de input podem ser mantidas, mas toda validação de submit deve ser feita apenas em script.js
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="../js/integracao-pagamento.js"></script>
+
+</body>
+</html>
+

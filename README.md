@@ -28,7 +28,7 @@ A estrutura do site foi feita com HTML.
 Backend: Construído com .js, oferecendo para a comunicação entre o 
 frontend e o banco de dados.
 
-Banco de Dados: NodeJS.
+Banco de Dados: Em estudo.
 
 ---------------------------------------------------------------------------------------------------------------------------------------------
 

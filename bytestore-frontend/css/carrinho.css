@@ -1,0 +1,242 @@
+/* Carrinho */
+#carrinho {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#carrinho h2 {
+    margin-bottom: 20px;
+    color: #111;
+}
+
+#cartItems {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+#cartItems li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Garantir que os itens do carrinho fiquem agrupados à esquerda
+   (evita espaçamento exagerado entre colunas e melhora o alinhamento dos botões +/-) */
+#cartItems li.cart-item {
+    justify-content: flex-start;
+}
+
+#totalPrice {
+    font-weight: 700;
+    color: #111;
+}
+
+#carrinho button {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background-color: #b8f29b;
+    color: #111;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+#carrinho button:hover {
+    background-color: #9fd987;
+}
+
+/* Pagamento */
+#pagamento {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.payment-methods {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.payment-methods button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #fff;
+}
+
+.payment-methods button:nth-child(1) {
+    background-color: #4CAF50; /* verde */
+}
+
+.payment-methods button:nth-child(1):hover {
+    background-color: #45a049;
+}
+
+.payment-methods button:nth-child(2) {
+    background-color: #2196F3; /* azul */
+}
+
+.payment-methods button:nth-child(2):hover {
+    background-color: #0b7dda;
+}
+
+#cartaoForm, #pixForm {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+#cartaoForm input, #pixForm input {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0 12px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#cartaoForm button, #pixForm button {
+    width: 100%;
+    background-color: #b8f29b;
+    color: #111;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#cartaoForm button:hover, #pixForm button:hover {
+    background-color: #9fd987;
+}
+
+.close-btn {
+    background-color: #ff6b6b;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.close-btn:hover {
+    background-color: #e05a5a;
+}
+
+.remove-btn {
+    background-color: #ff6b6b;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    margin-left: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    background-color: #e05a5a;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* alinhado com branchTeste */
+    margin-bottom: 8px;
+    flex-wrap: wrap; /* quebra em duas linhas se necessário */
+}
+
+.miniatura {
+    width: 50px; /* alinhado com branchTeste */
+    height: 50px; /* alinhado com branchTeste */
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 150px;
+    flex: 1; /* ocupa o espaço disponível e mantém os controles alinhados */
+}
+
+.quantity-editor {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    /* Sobe levemente o bloco de quantidade (+/-) */
+    transform: translateY(-3px);
+}
+
+.quantity-btn {
+    background-color: #b8f29b;
+    color: #111;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.3s;
+    /* Evitar herdar margin/padding de #carrinho button */
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-btn:hover {
+    background-color: #9fd987;
+}
+
+.quantity-input {
+    width: 50px; /* alinhado com branchTeste */
+    text-align: center;
+    border: 1px solid #ccc; /* alinhado com branchTeste */
+    border-radius: 4px;
+    padding: 5px;
+    height: 32px; /* casa com os botões para alinhar verticalmente */
+    font-weight: bold;
+}
+
+.size-select {
+    margin-left: auto;
+    font-size: 12px;
+    padding: 2px 5px;
+}
+
+/* Mensagem de alerta customizada no carrinho */
+.cart-message {
+    display: none; /* Começa oculta */
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #ffffff; /* Fundo avermelhado claro */
+    color: #d8000c; /* Texto vermelho escuro */
+    border: 1px solid #000000;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+}

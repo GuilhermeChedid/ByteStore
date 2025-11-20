@@ -1,0 +1,52 @@
+/* Tabs Login / Cadastro */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    background-color: #b8f29b;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    border-radius: 6px;
+    transition: 0.3s;
+}
+
+.tab-btn:hover {
+    background-color: #9fd987;
+}
+
+.tab-btn.active {
+    background-color: #45a049;
+    color: #fff;
+}
+
+.tab-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tab-content input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.tab-content button {
+    padding: 12px;
+    background-color: #b8f29b;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tab-content button:hover {
+    background-color: #9fd987;
+}

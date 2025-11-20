@@ -1,0 +1,28 @@
+// COMANDOS PARA CONFIGURAÇÃO INICIAL DO PROJETO
+// npm init -y 
+// npm install express sqlite3 cors bcrypt http-server
+// npm install -g http-server
+
+//Para ativar NPM no powerShell
+
+// COMANDOS PARA RODAR O PROJETO BYTESTORE
+
+// 1. BACKEND (API Server - Porta 3000)
+// cd c:\ByteStore; $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User"); node server.js
+
+// Para ligar front 
+//cd bytestore-frontend; http-server -p 8080 -c-1
+// 2. FRONTEND (Static Server - Porta 8080)
+// cd c:\ByteStore\bytestore-frontend; $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User"); http-server -p 8080 -c-1
+
+// ACESSO AO PROJETO:
+// Frontend: http://127.0.0.1:8080
+// Backend API: http://localhost:3000
+// Páginas principais: home.html, minha_conta.html, masculina.html, feminina.html
+
+// OBSERVAÇÕES:
+// - O backend possui autenticação com bcrypt
+// - O frontend serve arquivos estáticos (HTML, CSS, JS, imagens)
+// - Ambos os servidores devem estar rodando simultaneamente
+// - Use terminais separados para cada comando
+
